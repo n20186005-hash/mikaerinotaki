@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers — static assets deploy (无数据库 / 无登录 / 无CMS)
+  // Build first: `pnpm build`, then `wrangler deploy`.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mikaerinotaki",
+  "compatibility_date": "2025-04-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
