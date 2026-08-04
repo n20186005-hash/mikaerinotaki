@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { accessWays, parking, parkingModes } from '../data/access';
+---
+<Base
+  title="見帰りの滝へのアクセス・駐車場｜相知駅・唐津IC・多久ICからの行き方"
+  description="見帰りの滝への行き方と駐車場を案内。唐津IC・多久IC・相知駅からのアクセス、清流荘前・都荘前・蛍橋前の駐車台数、あじさい祭り期間の交通規制やシャトルまで。"
+  active="/access"
+>
+  <PageHead
+    crumb="ACCESS"
+    title="アクセス・駐車場"
+    lead="相知駅・唐津IC・多久ICからの行き方と、駐車場の情報。通常期とあじさい祭り期間で運用が変わる点も整理しました。"
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">How to get there</p>
+      <h2 class="section-title">行き方</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        {accessWays.map((w) => (
+          <div class="card">
+            <div class="ico" aria-hidden="true">{w.icon}</div>
+            <h3>{w.title}</h3>
+            <ul class="checklist" style="margin-top:6px">
+              {w.lines.map((l) => <li>{l}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Parking</p>
+      <h2 class="section-title">駐車場</h2>
+      <p class="section-lead" style="margin-bottom:26px">滝の周辺には、普通車あわせて約50台の駐車スペースがあります。場所ごとの目安は次のとおりです。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>駐車場</th><th>普通車</th><th>大型車</th><th>滝までの目安</th></tr></thead>
+          <tbody>
+            {parking.map((p) => (
+              <tr><td>{p.name}</td><td class="en">{p.car}</td><td class="en">{p.bus}</td><td>{p.note}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.84rem;color:rgba(41,49,46,.6);margin-top:12px">※台数は目安です。あじさい祭り期間は運用が変わります。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Two modes</p>
+      <h2 class="section-title">通常期と、あじさい祭り期間</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        <div class="card">
+          <h3>{parkingModes.normal.icon} {parkingModes.normal.title}</h3>
+          <p style="margin-bottom:14px">{parkingModes.normal.desc}</p>
+          <ul class="checklist">{parkingModes.normal.points.map((p) => <li>{p}</li>)}</ul>
+        </div>
+        <div class="card" style="border-color:rgba(139,118,156,.35)">
+          <h3>{parkingModes.festival.icon} {parkingModes.festival.title}</h3>
+          <p style="margin-bottom:14px">{parkingModes.festival.desc}</p>
+          <ul class="checklist">{parkingModes.festival.points.map((p) => <li>{p}</li>)}</ul>
+        </div>
+      </div>
+      <div class="notice warn" style="margin-top:24px"><strong>ご注意：</strong>あじさい祭りの交通ルールは年ごとに異なります。ある年の情報をそのまま当てにせず、お出かけ前に最新の案内をご確認ください。</div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Navigate</p>
+      <h2 class="section-title">地図アプリで開く</h2>
+      <p class="section-lead" style="margin-inline:auto;margin-bottom:24px">目的地を選んで、お使いの地図アプリでルート案内を開始できます。</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+        <a class="btn btn--dark" href="https://www.google.com/maps/search/?api=1&query=見帰りの滝+蛍橋駐車場" target="_blank" rel="noopener">蛍橋駐車場へ</a>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&query=見帰りの滝+清流荘" target="_blank" rel="noopener">上流の駐車エリアへ</a>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&query=相知駅" target="_blank" rel="noopener">相知駅へ</a>
+      </div>
+      <p style="margin-top:26px"><a class="btn btn--primary" href="/walk" style="background:var(--forest);color:#fff">到着後の散策ルートを見る →</a></p>
+    </div>
+  </section>
+</Base>

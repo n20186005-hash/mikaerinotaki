@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { courses } from '../data/nearby';
+---
+<Base
+  title="見帰りの滝 周辺のモデルコース｜相知・厳木・唐津の半日・一日プラン"
+  description="見帰りの滝を起点にした半日・一日モデルコースを4つ紹介。鵜殿石仏群、蕨野の棚田、環境芸術の森、道の駅厳木、温泉、虹の松原や唐津城まで。"
+  active="/nearby"
+>
+  <PageHead
+    crumb="COURSES"
+    title="半日・一日のモデルコース"
+    lead="滝だけなら1〜2時間。周辺とつなげば、相知・厳木・唐津をめぐる充実した旅になります。目的別に4つのコースをご紹介します。"
+  />
+
+  <section class="section">
+    <div class="wrap">
+      {
+        courses.map((c) => (
+          <div class="route-card" style="margin-bottom:22px">
+            <div>
+              <span class="scard when">{c.tag}</span>
+              <h3>{c.letter} ｜ {c.title}</h3>
+              <p style="color:rgba(41,49,46,.82);font-size:.94rem">{c.desc}</p>
+            </div>
+            <ul class="route-steps">{c.steps.map((s) => <li>{s}</li>)}</ul>
+          </div>
+        ))
+      }
+      <div class="notice" style="margin-top:8px"><strong>組み立てのコツ：</strong>滝の散策(1〜2時間)を午前に済ませ、午後に周辺スポットへ。昼食は相知か、少し走って唐津方面かを先に決めておくとスムーズです。</div>
+    </div>
+  </section>
+</Base>

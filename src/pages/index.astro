@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import SeasonCard from '../components/SeasonCard.astro';
+import RouteSelector from '../components/RouteSelector.astro';
+import FAQ from '../components/FAQ.astro';
+import { seasons } from '../data/seasons';
+import { faqs } from '../data/faq';
+import { courses } from '../data/nearby';
+
+const homeSeasons = seasons.filter((s) => s.id !== 'winter');
+const homeFaqs = faqs.slice(0, 5);
+---
+<Base
+  title="見帰りの滝｜あじさい・アクセス・駐車場・見頃ガイド"
+  description="佐賀県唐津市相知町の見帰りの滝を詳しく案内。あじさいの見頃、アクセス、駐車場、散策ルート、ライトアップ、周辺グルメやモデルコースを紹介します。"
+  preloadHero={true}
+>
+  <Hero />
+
+  <!-- FACTS -->
+  <section class="section alt">
+    <div class="wrap">
+      <div class="facts">
+        <div class="cell"><div class="num">100<span style="font-size:1rem">選</span></div><div class="lbl">日本の滝百選</div></div>
+        <div class="cell"><div class="num">50<span style="font-size:1rem">種</span></div><div class="lbl">約4万株のあじさい</div></div>
+        <div class="cell"><div class="num">18<span style="font-size:1rem">分</span></div><div class="lbl">唐津ICから車で約10km</div></div>
+        <div class="cell"><div class="num">60<span style="font-size:1rem">分</span></div><div class="lbl">散策の目安時間</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="section" id="season">
+    <div class="wrap">
+      <p class="eyebrow">Why visit</p>
+      <h2 class="section-title">滝の高さより、季節と歩く体験。</h2>
+      <p class="section-lead">見帰りの滝は一年を通して楽しめますが、その魅力は「いつ」「どの角度から」見るかで大きく変わります。訪れる前に、今の見どころを確かめてください。</p>
+      <div class="reasons">
+        <div class="reason"><span class="n">01</span><h3>滝とあじさいの共演</h3><p>下流の渓谷に約50種・4万株のあじさいが植えられ、6月には青や紫の花越しに滝を望めます。九州でも有数の眺めです。</p></div>
+        <div class="reason"><span class="n">02</span><h3>四季で変わる表情</h3><p>春の河津桜、初夏のあじさいと蛍、盛夏の深緑と水しぶき、秋の紅葉。同じ渓谷が季節ごとにまったく違う姿を見せます。</p></div>
+        <div class="reason"><span class="n">03</span><h3>複数の観瀑ポイント</h3><p>遠景の展望、橋の上、滝つぼ近く。歩く場所によって水の音も見え方も変化し、短い散策でも満足感があります。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEASONS -->
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Four seasons</p>
+      <h2 class="section-title">四季の見どころ</h2>
+      <p class="section-lead" style="margin-bottom:34px">それぞれの季節で、服装・混雑・撮影のコツが変わります。詳しくは四季ページへ。</p>
+      <div class="season-scroll">
+        {homeSeasons.map((s) => <SeasonCard season={s} />)}
+      </div>
+      <div style="margin-top:30px"><a class="btn btn--outline" href="/seasons">四季ページを見る →</a></div>
+    </div>
+  </section>
+
+  <!-- ROUTE SELECTOR -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Plan your walk</p>
+      <h2 class="section-title">滞在時間で選ぶ散策ルート</h2>
+      <p class="section-lead" style="margin-bottom:30px">使える時間を選ぶと、おすすめのまわり方が表示されます。</p>
+      <RouteSelector />
+      <div style="margin-top:26px"><a class="btn btn--outline" href="/walk">散策マップと詳細ルート →</a></div>
+    </div>
+  </section>
+
+  <!-- AJISAI -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="split wide">
+        <div class="split__media"><img src="/images/ajisai.jpg" alt="旅館と渓谷、前景にあじさいが咲く見帰りの滝の全景" loading="lazy" /></div>
+        <div>
+          <p class="eyebrow">Hydrangea</p>
+          <h2 class="section-title" style="color:#fff">あじさいと滝、<br />この滝いちばんの眺め。</h2>
+          <p style="color:rgba(255,255,255,.85)">下流の渓谷には約50種・4万株のあじさいが植えられ、例年6月に見頃を迎えます。青、紫、ピンクの花越しに眺める滝は、単なる「大きな滝」を超えた、この地ならではの風景です。</p>
+          <p style="color:rgba(255,255,255,.85)">花期には交通規制や臨時駐車、シャトルの運行が行われることがあります。訪問前に最新の案内をご確認ください。</p>
+          <a class="btn btn--primary" href="/ajisai" style="margin-top:8px">あじさい特集を見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAME -->
+  <section class="section alt">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Origin of the name</p>
+      <h2 class="section-title">なぜ「見帰り」と呼ばれるのか</h2>
+      <p class="lead">名前の由来には、いくつかの言い伝えがあります。地元に広く伝わるのは——<br />一度その場を離れても、坂道を戻ってもう一度見たくなるほど美しい、という物語です。</p>
+      <p style="color:rgba(41,49,46,.75)">正式な表記は「見帰りの滝」。よく見かける「見返りの滝」は一般的な誤記です。名称の由来は地方に伝わる物語として、滝と相知の歴史、あじさいの景観の成り立ちとあわせてご紹介します。</p>
+      <a class="btn btn--outline" href="/history" style="margin-top:10px">歴史と名前の物語 →</a>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Access &amp; parking</p>
+      <h2 class="section-title">交通と駐車場</h2>
+      <div class="grid grid-3" style="margin-top:30px">
+        <div class="card"><div class="ico" aria-hidden="true">🚗</div><h3>車で</h3><p>唐津ICから約10km・18分。多久ICから約20km・25分。ナビは「見帰りの滝」で検索できます。</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🚉</div><h3>公共交通</h3><p>JR唐津線「相知駅」下車。駅からタクシーで約7〜8分。本数が少ないため事前確認がおすすめです。</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🅿️</div><h3>駐車場</h3><p>清流荘前・都荘前・蛍橋前などに普通車あわせて約50台。あじさい祭り期間は運用が変わります。</p></div>
+      </div>
+      <div class="notice" style="margin-top:26px"><strong>ポイント：</strong>通常期とあじさい祭り期間では、使える駐車場・料金・交通規制が異なります。時期に合わせて確認してください。</div>
+      <div style="margin-top:24px"><a class="btn btn--dark" href="/access">アクセス・駐車場の詳細 →</a></div>
+    </div>
+  </section>
+
+  <!-- FOOD -->
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Local food</p>
+      <h2 class="section-title">滝のあとに味わう、相知の味</h2>
+      <p class="section-lead" style="margin-bottom:30px">滝の周辺は飲食店が多くありません。だからこそ、確かめて選んだ滝周辺のお店と、唐津まで足を延ばす“ついでグルメ”を分けてご案内します。</p>
+      <div class="grid grid-2">
+        <div class="card"><h3>滝のすぐそば</h3><p>渓谷沿いの宿でいただく、相知の川魚料理。歩いたあとの一食にふさわしい、この土地ならではの味です。訪問前の電話確認がおすすめです。</p></div>
+        <div class="card"><h3>唐津まで足をのばして</h3><p>呼子のイカ、佐賀牛、唐津バーガー、唐津茶。滝の帰り道に立ち寄れる、唐津エリアを代表するグルメです。</p></div>
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href="/food">周辺グルメを見る →</a></div>
+    </div>
+  </section>
+
+  <!-- COURSES -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Model courses</p>
+      <h2 class="section-title">半日・一日のモデルコース</h2>
+      <p class="section-lead" style="margin-bottom:30px">滝だけなら1〜2時間。周辺とつなげば、相知・厳木・唐津をめぐる充実した一日になります。</p>
+      <div class="grid grid-2">
+        {courses.map((c) => (
+          <div class="card"><h3>{c.letter} ｜ {c.title}</h3><p>{c.steps.join(' → ')}</p></div>
+        ))}
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href="/nearby">モデルコースの詳細 →</a></div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="section alt">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Before you go</p>
+          <h2 class="section-title">雨の日と、安全のこと</h2>
+          <p class="section-lead">雨は「行かない理由」ではありません。曇りや小雨の日はあじさいの色がやわらかく、渓谷に霧が立ちます。ただし足元は滑りやすくなります。</p>
+          <ul class="checklist" style="margin-top:20px">
+            <li>石段・濡れた岩は滑りやすい。滑りにくい靴で</li>
+            <li>ベビーカーは段差が多く、抱っこ紐が安心</li>
+            <li>水しぶきの近くではカメラ・スマホの防水を</li>
+            <li>夏は虫よけ、夕方以降は羽織るものを</li>
+            <li>川の増水時は無理に近づかない</li>
+          </ul>
+        </div>
+        <div class="split__media"><img src="/images/falls.jpg" alt="岩壁を流れ落ちる見帰りの滝の全景" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="section-title">よくある質問</h2>
+      <div style="margin-top:20px"><FAQ items={homeFaqs} /></div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href="/faq">すべての質問を見る →</a></div>
+    </div>
+  </section>
+</Base>

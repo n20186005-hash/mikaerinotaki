@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+---
+<Base
+  title="見帰りの滝のあじさい｜見頃・約4万株・雨の日・駐車場ガイド"
+  description="見帰りの滝のあじさいを詳しく案内。約50種4万株の見頃、雨の日の楽しみ方、花期の駐車場・交通規制・シャトル、撮影スポットまで。"
+  active="/ajisai"
+>
+  <PageHead
+    crumb="AJISAI"
+    title="あじさいと滝"
+    lead="約50種・4万株。青や紫の花越しに眺める滝は、見帰りの滝いちばんの見どころです。見頃、雨の日、花期の駐車場までまとめました。"
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="split wide">
+        <div class="split__media"><img src="/images/hero.jpg" alt="あじさいの前景と、白く流れ落ちる見帰りの滝" width="1600" height="1068" /></div>
+        <div>
+          <p class="eyebrow">Best season</p>
+          <h2 class="section-title">見頃はいつ？</h2>
+          <p class="lead">例年<strong>6月</strong>が見頃です。梅雨の時期と重なり、しっとりとした渓谷にあじさいが映えます。開花は天候により前後するため、訪問前に最新の開花状況をご確認ください。</p>
+          <div class="facts" style="margin-top:24px">
+            <div class="cell"><div class="num">6<span style="font-size:1rem">月</span></div><div class="lbl">例年の見頃</div></div>
+            <div class="cell"><div class="num">50<span style="font-size:1rem">種</span></div><div class="lbl">あじさいの品種</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">How to enjoy</p>
+      <h2 class="section-title">楽しみ方のポイント</h2>
+      <div class="grid grid-3" style="margin-top:30px">
+        <div class="card"><div class="ico" aria-hidden="true">☔</div><h3>雨の日こそ</h3><p>曇りや小雨の日は花色がやわらかく、水量も増えて渓谷に霧が立ちます。あじさいと滝の相性が最も良い天気です。足元の滑りにはご注意を。</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🕐</div><h3>時間帯</h3><p>早い時間帯は人が少なく、光もやわらかで撮影に向きます。花期の週末は日中に混み合います。</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">📷</div><h3>撮る場所</h3><p>あじさいを前景に、滝を背景に置く構図が定番。橋の上や滝つぼ近くなど、角度を変えて歩いてみてください。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">During the festival</p>
+      <h2 class="section-title">あじさい祭りの期間</h2>
+      <p class="lead">見頃に合わせて「見帰りの滝あじさい祭り」が催されます。期間中は、通常期とは駐車・交通の状況が大きく変わります。</p>
+      <div class="notice warn" style="margin-top:20px">
+        <strong>花期に変わること：</strong>臨時駐車場の有料化、周辺道路の交通規制、シャトルバスの運行、露店の出店など。年ごとに運用が異なるため、お出かけ前に最新の案内をご確認ください。
+      </div>
+      <ul class="checklist" style="margin-top:26px">
+        <li>混雑を避けるなら平日か午前の早い時間</li>
+        <li>臨時駐車場・交通規制の情報を事前に確認</li>
+        <li>シャトルの有無・乗り場を確認しておく</li>
+        <li>雨具と滑りにくい靴を用意</li>
+      </ul>
+      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--dark" href="/access">花期の駐車場・アクセス →</a>
+        <a class="btn btn--outline" href="/photo">撮影スポットを見る →</a>
+      </div>
+    </div>
+  </section>
+</Base>

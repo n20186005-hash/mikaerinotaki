@@ -1,0 +1,27 @@
+---
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site';
+
+interface Props {
+  active?: string;
+}
+const { active } = Astro.props;
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label={`${site.name} ホーム`}>
+      <Logo />
+      <span><b>{site.name}</b><small>{site.romaji}</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="メニュー" aria-controls="nav" aria-expanded="false"><span></span></button>
+    <nav class="nav" id="nav">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

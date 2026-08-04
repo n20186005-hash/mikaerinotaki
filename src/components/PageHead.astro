@@ -1,0 +1,15 @@
+---
+interface Props {
+  crumb: string;
+  title: string;
+  lead: string;
+}
+const { crumb, title, lead } = Astro.props;
+---
+<section class="pagehead">
+  <div class="wrap">
+    <p class="crumbs"><a href="/">HOME</a> / {crumb}</p>
+    <h1>{title}</h1>
+    <p>{lead}</p>
+  </div>
+</section>

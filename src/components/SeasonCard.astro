@@ -1,0 +1,16 @@
+---
+import type { Season } from '../data/seasons';
+interface Props {
+  season: Season;
+}
+const { season } = Astro.props;
+---
+<article class="scard">
+  <div class="ph"><img src={season.thumb} alt={`${season.name}の見帰りの滝`} loading="lazy" /></div>
+  <div class="body">
+    <span class="when">{season.when}</span>
+    <h3>{season.name} — {season.sub}</h3>
+    <p>{season.short}</p>
+    <span class="chip">{season.chip}</span>
+  </div>
+</article>

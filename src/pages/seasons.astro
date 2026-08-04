@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { seasons } from '../data/seasons';
+---
+<Base
+  title="見帰りの滝の四季｜桜・あじさい・深緑・紅葉の見頃と服装"
+  description="見帰りの滝の四季を案内。春の桜、初夏のあじさいと蛍、盛夏の深緑、秋の紅葉、冬の静かな観瀑。季節ごとの見どころ・服装・撮影のコツをまとめました。"
+  active="/seasons"
+>
+  <PageHead
+    crumb="SEASONS"
+    title="四季の見どころ"
+    lead="同じ渓谷が、季節ごとにまったく違う姿を見せます。春の桜、初夏のあじさいと蛍、盛夏の深緑、秋の紅葉、冬の静けさ。服装や撮影のコツもあわせてご紹介します。"
+  />
+
+  {
+    seasons.map((s, i) => (
+      <section class={`section${i % 2 ? ' alt' : ''}`} id={s.id}>
+        <div class="wrap">
+          <div class={`split${i % 2 ? ' rev' : ''}`}>
+            <div class="split__media"><img src={s.img} alt={`${s.name}の見帰りの滝`} loading="lazy" /></div>
+            <div>
+              <span class="scard when">{s.when}</span>
+              <h2 class="section-title" style="margin-top:6px">{s.name} — {s.sub}</h2>
+              <p class="lead">{s.desc}</p>
+              <div class="route-meta" style="margin-top:20px">
+                {s.meta.map((m) => (
+                  <div>
+                    <div class="k">{m.k}</div>
+                    <div class="v" style="font-size:.98rem">{m.v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</Base>

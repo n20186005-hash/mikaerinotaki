@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { gallery, photoTips, credits } from '../data/photos';
+---
+<Base
+  title="見帰りの滝の写真スポット｜あじさい・全景・水しぶき・ライトアップ"
+  description="見帰りの滝の撮影スポットとギャラリー。あじさいの前景、滝の全景、水しぶきの近景、雨の日、夜のライトアップの撮り方と、写真クレジットをまとめました。"
+  active="/photo"
+>
+  <PageHead
+    crumb="PHOTO"
+    title="写真スポット"
+    lead="あじさいの前景、滝の全景、水しぶきの近景、雨の日、そして夜のライトアップ。見帰りの滝を美しく残すためのヒントとギャラリーです。"
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Where to shoot</p>
+      <h2 class="section-title">撮影のヒント</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        {photoTips.map((t) => (
+          <div class="card"><h3>{t.title}</h3><p>{t.body}</p></div>
+        ))}
+      </div>
+      <div class="notice warn" style="margin-top:24px"><strong>夜のライトアップ：</strong>時期によって滝がライトアップされます。期間や時間は変わることがあるため、お出かけ前に最新の案内をご確認ください。</div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Gallery</p>
+      <h2 class="section-title">ギャラリー</h2>
+      <p class="section-lead" style="margin-bottom:28px">季節ごとの見帰りの滝。実際の風景をご覧ください。</p>
+      <div class="gallery">
+        {gallery.map((g) => (
+          <figure><img src={g.src} alt={g.caption} loading="lazy" /><figcaption>{g.caption}</figcaption></figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="credits">
+    <div class="wrap narrow">
+      <p class="eyebrow">Photo credits</p>
+      <h2 class="section-title">写真クレジット</h2>
+      <p class="section-lead" style="margin-bottom:24px">当サイトの写真は、クリエイティブ・コモンズ・ライセンスのもとで公開されている作品を、各ライセンスの条件に従って使用しています。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>作品</th><th>撮影</th><th>ライセンス</th><th>出典</th></tr></thead>
+          <tbody>
+            {credits.map((c) => (
+              <tr>
+                <td>{c.title}</td>
+                <td>{c.author}</td>
+                <td class="en">{c.license}</td>
+                <td><a href={c.url} target="_blank" rel="noopener">出典</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.82rem;color:rgba(41,49,46,.6);margin-top:14px">出典：Wikimedia Commons。各ライセンスの詳細はリンク先をご確認ください。</p>
+    </div>
+  </section>
+</Base>

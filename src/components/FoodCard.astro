@@ -1,0 +1,21 @@
+---
+import type { FoodPlace } from '../data/food';
+interface Props {
+  place: FoodPlace;
+}
+const { place } = Astro.props;
+---
+<div class="food">
+  <div class="food__pic">
+    <span class="badge">{place.badge}</span>
+    <span class="kanji">{place.kanji}</span>
+  </div>
+  <div class="food__body">
+    <h3>{place.name}</h3>
+    <p class="sub">{place.sub}</p>
+    <p>{place.desc}</p>
+    <div class="food__meta">
+      {place.pills.map((p) => <span class={`pill${p.warn ? ' warn' : ''}`}>{p.text}</span>)}
+    </div>
+  </div>
+</div>

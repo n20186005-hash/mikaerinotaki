@@ -1,0 +1,11 @@
+---
+import { status } from '../data/status';
+---
+<aside class="status-card" aria-label="今の季節の状態">
+  <div class="k">今の季節</div>
+  <div class="season">{status.title}</div>
+  <div class="tags">
+    {status.highlights.map((h) => <span>{h}</span>)}
+  </div>
+  <div class="state"><span class="dot"></span>{status.state}</div>
+</aside>

@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import FAQ from '../components/FAQ.astro';
+import { faqs } from '../data/faq';
+---
+<Base
+  title="見帰りの滝 よくある質問｜料金・見頃・駐車場・雨の日・ライトアップ"
+  description="見帰りの滝のよくある質問。入場料、あじさいの見頃、歩きやすさ、駐車場、雨の日、ペット、ライトアップ、所要時間、公共交通をまとめました。"
+  active="/faq"
+>
+  <PageHead
+    crumb="FAQ"
+    title="よくある質問"
+    lead="料金、見頃、歩きやすさ、駐車場、雨の日、ペット、ライトアップまで。見帰りの滝を訪れる前の疑問にお答えします。"
+  />
+
+  <section class="section">
+    <div class="wrap narrow">
+      <FAQ items={faqs} />
+      <div class="spacer"></div>
+      <div class="notice">まだ疑問が残る場合は、<a href="/access">アクセス</a>・<a href="/ajisai">あじさい</a>・<a href="/walk">散策ルート</a>の各ページもあわせてご覧ください。</div>
+    </div>
+  </section>
+</Base>

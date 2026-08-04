@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import FoodCard from '../components/FoodCard.astro';
+import { nearFalls, karatsuFood } from '../data/food';
+---
+<Base
+  title="見帰りの滝 周辺のランチ・グルメ｜相知の川魚・豆腐と唐津の味"
+  description="見帰りの滝周辺のグルメを案内。滝そばの川魚料理・相知の豆腐から、唐津の呼子イカ・佐賀牛・唐津バーガーまで。予約や営業確認のポイントも。"
+  active="/food"
+>
+  <PageHead
+    crumb="FOOD"
+    title="周辺グルメ"
+    lead="滝の周辺は飲食店が多くありません。だからこそ、滝のすぐそばで味わえるお店と、唐津まで足を延ばす“ついでグルメ”を分けてご案内します。"
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Near the falls</p>
+      <h2 class="section-title">滝のすぐそば</h2>
+      <p class="section-lead" style="margin-bottom:28px">歩いたあとに味わう、相知の味。営業日・営業時間・予約は変わることがあるため、お出かけ前の電話確認がおすすめです。</p>
+      {nearFalls.map((p) => <FoodCard place={p} />)}
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Around Karatsu</p>
+      <h2 class="section-title">唐津まで足をのばして</h2>
+      <p class="section-lead" style="margin-bottom:28px">滝の帰り道、少し車を走らせれば、唐津エリアを代表するグルメに出会えます。※滝のすぐそばではありません。</p>
+      <div class="grid grid-3">
+        {karatsuFood.map((f) => (
+          <div class="card"><h3>{f.name}</h3><p>{f.desc}</p></div>
+        ))}
+      </div>
+      <div class="notice" style="margin-top:24px"><strong>ヒント：</strong>呼子のイカや佐賀牛の店は滝の近くではありません。「滝のそばで食べられるもの」と「唐津まで行って食べるもの」を分けて計画すると、当日あわてずに済みます。</div>
+    </div>
+  </section>
+</Base>

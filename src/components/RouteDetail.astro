@@ -1,0 +1,26 @@
+---
+import type { WalkRoute } from '../data/routes';
+interface Props {
+  route: WalkRoute;
+}
+const { route } = Astro.props;
+---
+<div class="route-card" style="margin-bottom:22px">
+  <div>
+    <span class="scard when">{route.tag}</span>
+    <h3>{route.title}</h3>
+    <p style="color:rgba(41,49,46,.82);font-size:.93rem">{route.desc}</p>
+    <div class="route-meta">
+      {route.meta.map((m) => (
+        <div>
+          <div class="k">{m.k}</div>
+          <div class="v">{m.v}</div>
+        </div>
+      ))}
+    </div>
+    {route.note && <div class="notice" style="margin-top:16px">{route.note}</div>}
+  </div>
+  <ul class="route-steps">
+    {route.steps.map((s) => <li>{s}</li>)}
+  </ul>
+</div>
