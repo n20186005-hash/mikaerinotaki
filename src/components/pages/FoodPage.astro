@@ -50,7 +50,7 @@ const m = meta[locale];
       </h2>
       <div class="notice" style="margin-bottom:26px">
         <strong>{t({ ja: '方針：', en: 'Our policy: ', 'zh-Hant': '原則：' })}</strong>{t({ ja: '当サイトは非営利の解説サイトです。特定の店舗名は紹介せず、「どんな種類の店がどの範囲にあるか」をまとめています。営業日・営業時間・予約は変わることがあるため、お出かけ前の電話確認がおすすめです。', en: 'This is a non-profit guide. We do not name specific shops — we summarise what kinds of places exist and where. Days, hours and reservations change, so a quick call before visiting is wise.', 'zh-Hant': '本站為非營利解說站，不介紹特定店名，僅整理「有哪些類型的店、落在哪些範圍」。營業日、時段與是否需預約常變動，建議出發前電話確認。' })}
-        <br />{entity.variantNote}
+        <br />{t(entity.variantNote)}
       </div>
       {nearFalls.map((p) => <FoodCard place={p} locale={locale} />)}
     </div>

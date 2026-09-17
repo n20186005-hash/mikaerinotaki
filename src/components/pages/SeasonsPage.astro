@@ -1,0 +1,107 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { seasons } from '../../data/seasons';
+import { climateNote } from '../../data/strategy';
+import { entity } from '../../data/entity';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const climatePoints: Record<Locale, string[]> = {
+  ja: [
+    '渓谷の底にあるため、体感は唐津市街より1〜3℃低くなることがあります',
+    '梅雨期（6〜7月）は降水量が多く、滝の水量が一年で最も増える時期です',
+    '雨の翌日は石段・岩が滑りやすく、増水時は河原へ降りないでください',
+    '数値はあくまで平年値です。出発前に当日の予報をご確認ください',
+  ],
+  en: [
+    'Being at the gorge bottom, it can feel 1–3°C cooler than central Karatsu',
+    'The rainy season (Jun–Jul) brings the most rain and the year’s highest flow',
+    'After rain, stone steps and rock are slippery — don’t go down to the river when swollen',
+    'Figures are normals only; check the day’s forecast before you set out',
+  ],
+  'zh-Hant': [
+    '位於溪谷底部，體感可能比唐津市區低1〜3°C',
+    '梅雨季（6〜7月）降雨最多，也是瀑布一年水量最大的時期',
+    '雨後石階與岩石濕滑，漲水時勿下到河床',
+    '數值僅為平年值，出發前請確認當日預報',
+  ],
+};
+
+const meta = {
+  ja: {
+    title: '見帰りの滝の四季｜桜・あじさい・深緑・紅葉の見頃と服装',
+    description: '見帰りの滝の四季を案内。春の桜、初夏のあじさいと蛍、盛夏の深緑、秋の紅葉、冬の静かな観瀑。季節ごとの見どころ・服装・撮影のコツをまとめました。',
+    crumb: '四季',
+    headTitle: '四季の見どころ',
+    headLead: '同じ渓谷が、季節ごとにまったく違う姿を見せます。春の桜、初夏のあじさいと蛍、盛夏の深緑、秋の紅葉、冬の静けさ。服装や撮影のコツもあわせてご紹介します。',
+  },
+  en: {
+    title: `Four Seasons at ${entity.fullNameEn} | Cherry, Hydrangea, Green & Autumn Leaves`,
+    description: `The four seasons of ${entity.fullNameEn}: spring cherry, early-summer hydrangea and fireflies, midsummer green, autumn leaves, and a quiet winter. Highlights, clothing and photo tips for each season.`,
+    crumb: 'Seasons',
+    headTitle: 'Seasonal highlights',
+    headLead: 'The same gorge shows a completely different face each season — cherry in spring, hydrangea and fireflies in early summer, deep green in midsummer, red leaves in autumn, quiet in winter. We also share clothing and photo tips.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 的四季｜櫻花・繡球花・深綠・紅葉`,
+    description: `${entity.fullName}的四季：春櫻、初夏繡球花與螢火蟲、盛夏深綠、秋紅葉、冬之靜謐。整理各季看點、服裝與拍攝訣竅。`,
+    crumb: '四季',
+    headTitle: '四季看點',
+    headLead: '同一溪谷每季展現截然不同的姿態——春櫻、初夏繡球花與螢火蟲、盛夏深綠、秋紅葉、冬靜謐。並附服裝與拍攝訣竅。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/seasons" crumb={m.crumb}>
+  <PageHead crumb="SEASONS" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  {
+    seasons.map((s, i) => (
+      <section class={`section${i % 2 ? ' alt' : ''}`} id={s.id}>
+        <div class="wrap">
+          <div class={`split${i % 2 ? ' rev' : ''}`}>
+            <div class="split__media"><img src={s.img} alt={`${entity.fullName}（${entity.fullNameEn}）— ${t(s.name)}の${t(s.sub)}。${t(s.chip)}の景色`} loading="lazy" /></div>
+            <div>
+              <span class="scard when">{s.when}</span>
+              <h2 class="section-title" style="margin-top:6px">{t(s.name)} — {t(s.sub)}</h2>
+              <p class="lead">{t(s.desc)}</p>
+              <div class="route-meta" style="margin-top:20px">
+                {s.meta.map((mm) => (
+                  <div>
+                    <div class="k">{t(mm.k)}</div>
+                    <div class="v" style="font-size:.98rem">{t(mm.v)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section alt">
+    <div class="wrap narrow">
+      <p class="eyebrow">Climate data</p>
+      <h2 class="section-title">
+        {t({ ja: '季節の傾向をデータで見る', en: 'Seasonal trends in data', 'zh-Hant': '用數據看季節趨勢' })}<span class="h2-en">{t({ ja: 'Climate normals & seasonal strategy', en: 'Climate normals & seasonal strategy', 'zh-Hant': 'Climate normals & seasonal strategy' })}</span>
+      </h2>
+      <p class="lead" style="margin-bottom:18px">{t(climateNote)}</p>
+      <ul class="checklist">
+        {climatePoints[locale].map((p) => <li>{p}</li>)}
+      </ul>
+      <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--outline" href={localeUrlSafe('/#weather', locale)}>{t({ ja: '今日の天気・週間予報 →', en: 'Today’s weather & forecast →', 'zh-Hant': '今日天氣與週預報 →' })}</a>
+        <a class="btn btn--outline" href={localeUrlSafe('/#strategy', locale)}>{t({ ja: '季節ごとの鑑賞戦略 →', en: 'Seasonal viewing strategy →', 'zh-Hant': '各季觀賞策略 →' })}</a>
+        <a class="btn btn--outline" href={localeUrlSafe('/#science', locale)}>{t({ ja: '地形と水の科学 →', en: 'Science of terrain & water →', 'zh-Hant': '地形與水的科學 →' })}</a>
+      </div>
+    </div>
+  </section>
+</Base>

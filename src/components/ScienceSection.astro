@@ -1,40 +1,44 @@
 ---
 import { scienceTopics, visitorDuties } from '../data/science';
 import { entity } from '../data/entity';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   id?: string;
   /** トピックを全文表示するか（ページ用） */
   detailed?: boolean;
+  locale?: Locale;
 }
-const { id = 'science', detailed = false } = Astro.props;
+const { id = 'science', detailed = false, locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
 
 <section class="section alt" id={id}>
   <div class="wrap">
     <p class="eyebrow">Science &amp; nature</p>
     <h2 class="section-title">
-      見帰りの滝を科学で読み解く<span class="h2-en">Geology, hydrology &amp; ecology of {entity.fullNameEn}</span>
+      {t({ ja: '見帰りの滝を科学で読み解く', en: 'The falls, read through science', 'zh-Hant': '用科學解讀見歸里之瀧' })}<span class="h2-en">Geology, hydrology &amp; ecology of {entity.fullNameEn}</span>
     </h2>
     <p class="section-lead" style="margin-bottom:30px">
-      この滝がどうしてここにあり、どんな水と生きものに支えられているのか。知ってから歩くと、景色の見え方が変わります。
+      {t({ ja: 'この滝がどうしてここにあり、どんな水と生きものに支えられているのか。知ってから歩くと、景色の見え方が変わります。', en: 'Why the falls sits here, and what water and life sustain it — knowing first changes how the view reads.', 'zh-Hant': '這座瀑布為何在此、由何種水與生物支撐；先看再走，景色的看法會不同。' })}
     </p>
 
     <div class="grid grid-2">
       {
-        scienceTopics.map((t) => (
+        scienceTopics.map((tp) => (
           <article class="card science">
-            <h3>{t.icon} {t.title}</h3>
-            <p class="science__lead">{t.lead}</p>
+            <h3>{tp.icon} {t(tp.title)}</h3>
+            <p class="science__lead">{t(tp.lead)}</p>
             <dl class="facility__list">
-              {(detailed ? t.points : t.points.slice(0, 3)).map((p) => (
+              {(detailed ? tp.points : tp.points.slice(0, 3)).map((p) => (
                 <div class="facility__row">
-                  <dt>{p.k}</dt>
-                  <dd>{p.v}</dd>
+                  <dt>{t(p.k)}</dt>
+                  <dd>{t(p.v)}</dd>
                 </div>
               ))}
             </dl>
-            {t.note && <p class="facility__caution">※ {t.note}</p>}
+            {tp.note && <p class="facility__caution">※ {t(tp.note)}</p>}
           </article>
         ))
       }
@@ -46,10 +50,10 @@ const { id = 'science', detailed = false } = Astro.props;
   <div class="wrap">
     <p class="eyebrow">Visitor responsibility</p>
     <h2 class="section-title">
-      来訪者の責任（守ってほしいこと）<span class="h2-en">Leave no trace, keep the gorge safe</span>
+      {t({ ja: '来訪者の責任（守ってほしいこと）', en: 'Visitor responsibility', 'zh-Hant': '訪客的責任（請遵守）' })}<span class="h2-en">Leave no trace, keep the gorge safe</span>
     </h2>
     <p class="section-lead" style="margin-bottom:28px">
-      渓谷は人の手で守られている景観です。次の人が同じ景色に出会えるよう、8つの約束を守りましょう。
+      {t({ ja: '渓谷は人の手で守られている景観です。次の人が同じ景色に出会えるよう、8つの約束を守りましょう。', en: 'The gorge is a landscape kept by human hands. Keep these eight promises so the next visitor meets the same view.', 'zh-Hant': '溪谷是經人手守護的景觀。遵守這八項約定，讓下一位訪客也能見到同樣風景。' })}
     </p>
     <div class="grid grid-2">
       {
@@ -57,15 +61,15 @@ const { id = 'science', detailed = false } = Astro.props;
           <div class="duty">
             <span class="duty__icon" aria-hidden="true">{d.icon}</span>
             <div>
-              <h3>{d.title}</h3>
-              <p>{d.body}</p>
+              <h3>{t(d.title)}</h3>
+              <p>{t(d.body)}</p>
             </div>
           </div>
         ))
       }
     </div>
     <div class="notice" style="margin-top:26px">
-      <strong>補足：</strong>当サイトは非営利の解説サイトです。特定の店舗・施設の紹介は行わず、種別と一般的な傾向のみをまとめています。最新の規制・営業状況は、必ず現地の案内・公式情報でご確認ください。
+      <strong>{t({ ja: '補足：', en: 'Note: ', 'zh-Hant': '補充：' })}</strong>{t({ ja: '当サイトは非営利の解説サイトです。特定の店舗・施設の紹介は行わず、種別と一般的な傾向のみをまとめています。最新の規制・営業状況は、必ず現地の案内・公式情報でご確認ください。', en: 'This is a non-profit guide. We name no specific shops/facilities — only types and general trends. Always check local notices and official info for the latest rules and hours.', 'zh-Hant': '本站為非營利解說站，不介紹特定店家或設施，僅整理類型與一般趨勢。最新規範與營業狀況請務必查當地指引與官方資訊。' })}
     </div>
   </div>
 </section>

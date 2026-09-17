@@ -49,7 +49,7 @@ const m = meta[locale];
         <a class="btn btn--outline" href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">{c.officialInfo}</a>
       </div>
       <div class="notice" style="margin-top:18px">
-        <strong>{t({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' })}</strong>{entity.variantNote}
+        <strong>{t({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' })}</strong>{t(entity.variantNote)}
       </div>
     </div>
   </section>

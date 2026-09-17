@@ -1,11 +1,19 @@
 ---
 import { routes } from '../data/routes';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
-<div class="route-tabs" role="tablist" aria-label="滞在時間">
+<div class="route-tabs" role="tablist" aria-label={t({ ja: '滞在時間', en: 'Time & pace', 'zh-Hant': '停留時間' })}>
   {
     routes.map((r, i) => (
       <button role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls={r.id} id={`t-${r.id}`}>
-        {r.tab}
+        {t(r.tab)}
       </button>
     ))
   }
@@ -15,20 +23,20 @@ import { routes } from '../data/routes';
     <div class={`route-panel${i === 0 ? ' active' : ''}`} id={r.id} role="tabpanel" aria-labelledby={`t-${r.id}`}>
       <div class="route-card">
         <div>
-          <span class="scard when">{r.tag}</span>
-          <h3>{r.title}</h3>
-          <p style="color:rgba(41,49,46,.82);font-size:.93rem">{r.desc}</p>
+          <span class="scard when">{t(r.tag)}</span>
+          <h3>{t(r.title)}</h3>
+          <p style="color:rgba(41,49,46,.82);font-size:.93rem">{t(r.desc)}</p>
           <div class="route-meta">
             {r.meta.map((m) => (
               <div>
-                <div class="k">{m.k}</div>
-                <div class="v">{m.v}</div>
+                <div class="k">{t(m.k)}</div>
+                <div class="v">{t(m.v)}</div>
               </div>
             ))}
           </div>
         </div>
         <ul class="route-steps">
-          {r.steps.map((s) => <li>{s}</li>)}
+          {r.steps.map((s) => <li>{t(s)}</li>)}
         </ul>
       </div>
     </div>

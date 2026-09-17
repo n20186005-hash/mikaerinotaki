@@ -1,20 +1,25 @@
 ---
 import { audiencePlans, generalPlans } from '../data/strategy';
+import { L, type Localized } from '../i18n/types';
+import { localeUrlSafe } from '../i18n/config';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   id?: string;
+  locale?: Locale;
 }
-const { id = 'plans' } = Astro.props;
+const { id = 'plans', locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
 
 <section class="section alt" id={id}>
   <div class="wrap">
     <p class="eyebrow">Plans by visitor type</p>
     <h2 class="section-title">
-      誰と行くかで選ぶ、3つのプラン<span class="h2-en">Plans for families, photographers &amp; low-mobility visitors</span>
+      {t({ ja: '誰と行くかで選ぶ、3つのプラン', en: 'Three plans by who you go with', 'zh-Hant': '依同行者選擇的三種方案' })}<span class="h2-en">Plans for families, photographers &amp; low-mobility visitors</span>
     </h2>
     <p class="section-lead" style="margin-bottom:30px">
-      同じ滝でも、同行者と体力で歩き方は変わります。出発前に「今日の歩き方」を決めておきましょう。
+      {t({ ja: '同じ滝でも、同行者と体力で歩き方は変わります。出発前に「今日の歩き方」を決めておきましょう。', en: 'The same falls, walked differently by company and stamina. Decide “how to walk today” before leaving.', 'zh-Hant': '同一座瀑布，依同行者與體力走法不同。出發前先決定「今天的走法」。' })}
     </p>
 
     <div class="grid grid-3">
@@ -24,16 +29,16 @@ const { id = 'plans' } = Astro.props;
             <div class="plan__head">
               <span class="plan__icon" aria-hidden="true">{p.icon}</span>
               <div>
-                <h3>{p.title}</h3>
-                <p class="plan__audience">{p.audience}</p>
+                <h3>{t(p.title)}</h3>
+                <p class="plan__audience">{t(p.audience)}</p>
               </div>
             </div>
-            <p class="plan__meta">{p.duration} ／ {p.level}</p>
+            <p class="plan__meta">{t(p.duration)} ／ {t(p.level)}</p>
             <ol class="plan__steps">
-              {p.steps.map((s) => <li>{s}</li>)}
+              {p.steps.map((s) => <li>{t(s)}</li>)}
             </ol>
             <ul class="checklist plan__tips">
-              {p.tips.map((t) => <li>{t}</li>)}
+              {p.tips.map((tp) => <li>{t(tp)}</li>)}
             </ul>
           </div>
         ))
@@ -46,19 +51,19 @@ const { id = 'plans' } = Astro.props;
   <div class="wrap">
     <p class="eyebrow">Recommended itineraries</p>
     <h2 class="section-title">
-      推奨モデルルート（半日／一日）<span class="h2-en">Recommended half-day &amp; full-day itineraries</span>
+      {t({ ja: '推奨モデルルート（半日／一日）', en: 'Recommended model routes (half / full day)', 'zh-Hant': '推薦模型路線（半日／一日）' })}<span class="h2-en">Recommended half-day &amp; full-day itineraries</span>
     </h2>
     <div class="grid grid-2" style="margin-top:30px">
       {
         generalPlans.map((g) => (
           <div class="card">
-            <h3>{g.icon} {g.title}<span class="plan__meta" style="display:block;margin-top:6px">{g.duration}</span></h3>
-            <ul class="route-steps" style="margin-top:14px">{g.steps.map((s) => <li>{s}</li>)}</ul>
-            <p style="font-size:.9rem;color:rgba(41,49,46,.8);margin-top:16px">{g.note}</p>
+            <h3>{g.icon} {t(g.title)}<span class="plan__meta" style="display:block;margin-top:6px">{t(g.duration)}</span></h3>
+            <ul class="route-steps" style="margin-top:14px">{g.steps.map((s) => <li>{t(s)}</li>)}</ul>
+            <p style="font-size:.9rem;color:rgba(41,49,46,.8);margin-top:16px">{t(g.note)}</p>
           </div>
         ))
       }
     </div>
-    <div style="margin-top:24px"><a class="btn btn--outline" href="/nearby">周辺のモデルコース詳細 →</a></div>
+    <div style="margin-top:24px"><a class="btn btn--outline" href={localeUrlSafe('/nearby', locale)}>{t({ ja: '周辺のモデルコース詳細 →', en: 'Nearby model courses →', 'zh-Hant': '周邊模型路線詳細 →' })}</a></div>
   </div>
 </section>

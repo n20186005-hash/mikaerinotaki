@@ -51,7 +51,7 @@ const m = meta[locale];
         <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('タクシー 唐津市相知町')}`} target="_blank" rel="noopener noreferrer">🚕 {c.taxiNav}</a>
       </div>
       <div class="notice" style="margin-top:18px">
-        <strong>{L({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' }, locale)}</strong>{entity.variantNote}
+        <strong>{L({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' }, locale)}</strong>{L(entity.variantNote, locale)}
         {L({ ja: 'カーナビ・地図アプリは「見帰りの滝」のほか、座標（北緯 ' + entity.latitude + ' / 東経 ' + entity.longitude + '）、Plus Code（' + entity.plusCode + '）でも検索できます。', en: 'Car nav and map apps also accept the coordinates (33.3678 N / 130.0395 E) or Plus Code (' + entity.plusCode + ').', 'zh-Hant': '車用導航與地圖 App 也可搜尋座標（北緯 ' + entity.latitude + '／東經 ' + entity.longitude + '）或 Plus Code（' + entity.plusCode + '）。' }, locale)}
       </div>
     </div>

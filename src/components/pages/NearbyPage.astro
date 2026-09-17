@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { courses } from '../../data/nearby';
+import { entity } from '../../data/entity';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: '見帰りの滝 周辺のモデルコース｜相知・厳木・唐津の半日・一日プラン',
+    description: '見帰りの滝を起点にした半日・一日モデルコースを4つ紹介。鵜殿石仏群、蕨野の棚田、環境芸術の森、道の駅厳木、温泉、虹の松原や唐津城まで。',
+    crumb: '周辺コース',
+    headTitle: '半日・一日のモデルコース',
+    headLead: '滝だけなら1〜2時間。周辺とつなげば、相知・厳木・唐津をめぐる充実した旅になります。目的別に4つのコースをご紹介します。',
+  },
+  en: {
+    title: `Model Courses around ${entity.fullNameEn} | Half- & Full-day Plans in Arito, Kishima & Karatsu`,
+    description: `Four half- and full-day model courses starting from ${entity.fullNameEn}: Udon stone Buddhas, Warabi terraces, Kankyo Geijutsu no Mori, Michi-no-eki Kishima, hot springs, Nijinomatsubara and Karatsu Castle.`,
+    crumb: 'Area tours',
+    headTitle: 'Half- & full-day courses',
+    headLead: 'The falls alone is 1–2 hours. Tie in the surroundings for a rich trip around Arito, Kishima and Karatsu. Four purpose-based courses for you.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 周邊推薦行程｜相知・嚴木・唐津的半日・一日規劃`,
+    description: `以${entity.fullName}為起點的4條半日・一日行程：鵜殿石佛群、蕨野梯田、環境藝術之森、道之驛嚴木、溫泉、虹之松原與唐津城。`,
+    crumb: '周邊行程',
+    headTitle: '半日・一日行程',
+    headLead: '只看瀑布約1〜2小時。結合周邊就是暢遊相知、嚴木、唐津的充實旅程。依目的介紹4條路線。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/nearby" crumb={m.crumb}>
+  <PageHead crumb="COURSES" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap">
+      {
+        courses.map((c) => (
+          <div class="route-card" style="margin-bottom:22px">
+            <div>
+              <span class="scard when">{t(c.tag)}</span>
+              <h3>{c.letter} ｜ {t(c.title)}</h3>
+              <p style="color:rgba(41,49,46,.82);font-size:.94rem">{t(c.desc)}</p>
+            </div>
+            <ul class="route-steps">{c.steps.map((s) => <li>{t(s)}</li>)}</ul>
+          </div>
+        ))
+      }
+      <div class="notice" style="margin-top:8px"><strong>{t({ ja: '組み立てのコツ：', en: 'How to build it: ', 'zh-Hant': '安排訣竅：' })}</strong>{t({ ja: '滝の散策(1〜2時間)を午前に済ませ、午後に周辺スポットへ。昼食は相知か、少し走って唐津方面かを先に決めておくとスムーズです。', en: 'Do the falls walk (1–2 h) in the morning, then nearby spots in the afternoon. Decide lunch in Arito or a bit further toward Karatsu beforehand for a smooth day.', 'zh-Hant': '上午先完成瀑布散步（1〜2小時），下午再去周邊景點。午餐先決定在相知或稍往唐津方向，行程更順。' })}</div>
+    </div>
+  </section>
+</Base>

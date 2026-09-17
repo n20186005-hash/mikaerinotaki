@@ -2,37 +2,45 @@
 import { site } from '../data/site';
 import { entity } from '../data/entity';
 import { reviews } from '../data/reviews';
+import { L, type Localized } from '../i18n/types';
+import { localeUrlSafe, type Locale } from '../i18n/config';
 import SeasonStatus from './SeasonStatus.astro';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
 <section class="hero">
   <img
     class="hero__img"
     src="/images/hero.jpg"
-    alt={`${entity.fullName}（${entity.fullNameEn}）— Main view in ${entity.cityEn}, ${entity.countryEn}. 岩肌を白く流れ落ちる水と、青や紫のあじさいの前景。`}
+    alt={`${entity.fullName}（${entity.fullNameEn}）— Main view in ${entity.cityEn}, ${entity.countryEn}. ${t({ ja: '岩肌を白く流れ落ちる水と、青や紫のあじさいの前景。', en: 'White water down the rock face, with blue/purple hydrangea in the foreground.', 'zh-Hant': '沿岩壁傾瀉的白色水流，前景為藍紫色繡球花。' })}`}
     width="1600"
     height="1068"
   />
   <div class="wrap">
     <div class="hero__inner">
       <div class="hero__title">
-        <p class="hero__badge">日本の滝百選 / 佐賀・唐津・相知</p>
+        <p class="hero__badge">{t({ ja: '日本の滝百選 / 佐賀・唐津・相知', en: 'Japan’s 100 Falls / Saga · Karatsu · Arito', 'zh-Hant': '日本瀑布百選 / 佐賀・唐津・相知' })}</p>
         <h1>
           {entity.fullName}
           <span class="hero__h1meta">（{entity.state}{entity.city}・{entity.fullNameEn}）</span>
         </h1>
-        <p class="hero__sub">{site.tagline}</p>
-        <p class="hero__lead">{site.intro}</p>
+        <p class="hero__sub">{t(site.tagline)}</p>
+        <p class="hero__lead">{t(site.intro)}</p>
         <div class="hero__cta">
-          <a class="btn btn--primary" href="#season">今の見どころ</a>
-          <a class="btn btn--ghost" href="/access">アクセス・駐車場</a>
+          <a class="btn btn--primary" href="#season">{t({ ja: '今の見どころ', en: 'What’s on now', 'zh-Hant': '目前看點' })}</a>
+          <a class="btn btn--ghost" href={localeUrlSafe('/access', locale)}>{t({ ja: 'アクセス・駐車場', en: 'Access & parking', 'zh-Hant': '交通・停車場' })}</a>
         </div>
         <p class="hero__rating">
           <a href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
-            {reviews.sourceName} 評価 <b>{reviews.rating}</b>／{reviews.ratingCountLabel} 件 ↗
+            {t(reviews.sourceName)} {t({ ja: '評価', en: 'rating', 'zh-Hant': '評價' })} <b>{reviews.rating}</b>／{t(reviews.ratingCountLabel)} {t({ ja: '件', en: '', 'zh-Hant': '則' })} ↗
           </a>
         </p>
       </div>
-      <SeasonStatus />
+      <SeasonStatus locale={locale} />
     </div>
   </div>
 </section>

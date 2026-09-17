@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import RouteMap from '../RouteMap.astro';
+import RouteDetail from '../RouteDetail.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { routes } from '../../data/routes';
+import { entity } from '../../data/entity';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const walkRoutes = routes.filter((r) => r.id !== 'rhd');
+
+const meta = {
+  ja: {
+    title: '見帰りの滝の散策ルート・マップ｜所要時間・階段・ベビーカー',
+    description: '見帰りの滝の散策マップと3つのルート(クイック観瀑・標準渓谷・撮影)を案内。所要時間、歩行量、階段、ベビーカー可否、雨後の注意までまとめました。',
+    crumb: '散策ルート',
+    headTitle: '散策ルート・マップ',
+    headLead: '駐車場・遊歩道・川・橋・滝・トイレ・撮影スポットの位置を一枚に。目的に合わせて、3つのルートから選べます。',
+  },
+  en: {
+    title: `Walking Routes & Map for ${entity.fullNameEn} | Time, Steps & Strollers`,
+    description: `Trail map and three routes for ${entity.fullNameEn} (quick view, standard gorge, photo). Time, distance, steps, stroller access and post-rain cautions.`,
+    crumb: 'Walking',
+    headTitle: 'Walking routes & map',
+    headLead: 'One map of the parking, trail, river, bridges, falls, toilets and photo spots. Pick from three routes by your purpose.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 散步路線與地圖｜所需時間・石階・嬰兒車`,
+    description: `${entity.fullName}的散步地圖與3條路線（快速觀瀑・標準溪谷・攝影）。時間、步行量、石階、嬰兒車可否與雨後注意。`,
+    crumb: '散步路線',
+    headTitle: '散步路線與地圖',
+    headLead: '一張圖涵蓋停車場、步道、河、橋、瀑布、廁所與攝影點。可依目的從3條路線選擇。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/walk" crumb={m.crumb}>
+  <PageHead crumb="WALK" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Trail map</p>
+      <h2 class="section-title">{t({ ja: '散策マップ(模式図)', en: 'Trail map (schematic)', 'zh-Hant': '散步地圖（示意圖）' })}</h2>
+      <p class="section-lead" style="margin-bottom:24px">{t({ ja: '全体の位置関係をつかむための簡易マップです。実際のルート案内は、地図アプリをご利用ください。', en: 'A simple map to grasp the overall layout. For real route guidance, use your map app.', 'zh-Hant': '用於掌握整體位置關係的簡易地圖。實際路線請用地圖 App。' })}</p>
+      <RouteMap locale={locale} />
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Choose a route</p>
+      <h2 class="section-title">{t({ ja: '3つの散策ルート', en: 'Three walking routes', 'zh-Hant': '3條散步路線' })}</h2>
+      <div style="margin-top:28px">
+        {walkRoutes.map((r) => <RouteDetail route={r} locale={locale} />)}
+      </div>
+      <div style="margin-top:8px"><a class="btn btn--outline" href={localeUrlSafe('/photo', locale)}>{t({ ja: '撮影スポットの詳細 →', en: 'Photo spots →', 'zh-Hant': '攝影點詳細 →' })}</a></div>
+    </div>
+  </section>
+</Base>

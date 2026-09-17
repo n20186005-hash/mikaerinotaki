@@ -1,26 +1,31 @@
 ---
 import type { WalkRoute } from '../data/routes';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
+
 interface Props {
   route: WalkRoute;
+  locale?: Locale;
 }
-const { route } = Astro.props;
+const { route, locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
 <div class="route-card" style="margin-bottom:22px">
   <div>
-    <span class="scard when">{route.tag}</span>
-    <h3>{route.title}</h3>
-    <p style="color:rgba(41,49,46,.82);font-size:.93rem">{route.desc}</p>
+    <span class="scard when">{t(route.tag)}</span>
+    <h3>{t(route.title)}</h3>
+    <p style="color:rgba(41,49,46,.82);font-size:.93rem">{t(route.desc)}</p>
     <div class="route-meta">
       {route.meta.map((m) => (
         <div>
-          <div class="k">{m.k}</div>
-          <div class="v">{m.v}</div>
+          <div class="k">{t(m.k)}</div>
+          <div class="v">{t(m.v)}</div>
         </div>
       ))}
     </div>
-    {route.note && <div class="notice" style="margin-top:16px">{route.note}</div>}
+    {route.note && <div class="notice" style="margin-top:16px">{t(route.note)}</div>}
   </div>
   <ul class="route-steps">
-    {route.steps.map((s) => <li>{s}</li>)}
+    {route.steps.map((s) => <li>{t(s)}</li>)}
   </ul>
 </div>

@@ -1,16 +1,28 @@
 ---
 import type { Season } from '../data/seasons';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
+
 interface Props {
   season: Season;
+  locale?: Locale;
 }
-const { season } = Astro.props;
+const { season, locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
-<article class="scard">
-  <div class="ph"><img src={season.thumb} alt={`${season.name}の見帰りの滝`} loading="lazy" /></div>
+<article class="season-card">
+  <div class="media"><img src={season.img} alt={`${t(season.name)}の${t(season.sub)}`} width="760" height="500" loading="lazy" decoding="async" /></div>
   <div class="body">
-    <span class="when">{season.when}</span>
-    <h3>{season.name} — {season.sub}</h3>
-    <p>{season.short}</p>
-    <span class="chip">{season.chip}</span>
+    <p class="when">{season.when}</p>
+    <h3>{t(season.name)} <span>{t(season.sub)}</span></h3>
+    <p class="short">{t(season.short)}</p>
+    <span class="chip">{t(season.chip)}</span>
+    <dl class="facts">
+      {
+        season.meta.map((m) => (
+          <div class="row"><dt>{t(m.k)}</dt><dd>{t(m.v)}</dd></div>
+        ))
+      }
+    </dl>
   </div>
 </article>

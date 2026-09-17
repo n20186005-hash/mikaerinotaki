@@ -1,0 +1,145 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { stories, kindLabel } from '../../data/science';
+import type { Story } from '../../data/science';
+import { entity } from '../../data/entity';
+
+const kindClass: Record<Story['kind'], string> = {
+  official: 'official',
+  local: 'local',
+  editorial: 'editorial',
+};
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const timeline: Record<Locale, { yr: string; kindClass: string; kindLabel: string; title: string; body: string }[]> = {
+  ja: [
+    { yr: '古くから', kindClass: 'local', kindLabel: '言い伝え', title: '「見帰り」の名が伝わる', body: '美しさに、去ってももう一度見に帰りたくなる——名の由来が語り継がれてきました。' },
+    { yr: '近代以降', kindClass: 'official', kindLabel: '記録', title: '名瀑として知られる', body: '渓谷の景観が広く知られ、日本の滝百選に数えられるようになりました。' },
+    { yr: '近年', kindClass: 'local', kindLabel: '地域の取り組み', title: 'あじさいの植栽が広がる', body: '渓谷沿いのあじさいが育ち、約50種・4万株の景観へ。6月のあじさい祭りが恒例となりました。' },
+  ],
+  en: [
+    { yr: 'Ancient times', kindClass: 'local', kindLabel: 'Legend', title: 'The name “Mikaeri” is passed down', body: 'So beautiful you want to return for one more look — the origin of the name, told through generations.' },
+    { yr: 'Modern era', kindClass: 'official', kindLabel: 'Record', title: 'Known as a famed waterfall', body: 'The gorge’s scenery became widely known and was counted among Japan’s 100 Selected Falls.' },
+    { yr: 'Recent years', kindClass: 'local', kindLabel: 'Local effort', title: 'Hydrangea planting spreads', body: 'Hydrangea along the gorge grew into a ~50-variety, 40,000-plant landscape; the June festival became annual.' },
+  ],
+  'zh-Hant': [
+    { yr: '自古', kindClass: 'local', kindLabel: '傳說', title: '「見歸」之名流傳', body: '美得離去後仍想回頭再看一次——名稱由來代代相傳。' },
+    { yr: '近世以後', kindClass: 'official', kindLabel: '記錄', title: '以名瀑聞名', body: '溪谷景觀廣為人知，並入選日本瀑布百選。' },
+    { yr: '近年', kindClass: 'local', kindLabel: '地方努力', title: '繡球花栽植擴展', body: '溪谷沿線繡球花育成約50種・4萬株的景觀，6月繡球花祭成為年度慣例。' },
+  ],
+};
+
+const meta = {
+  ja: {
+    title: '見帰りの滝の歴史・名前の由来・伝説｜石仏とダム、あじさい祭りの歩み',
+    description: '見帰りの滝の名前の由来と歴史、右岸の石仏、伊岐佐川ダム、あじさい祭りのはじまり、相知の歴史まで。言い伝えと公的記録を区別して紹介します。',
+    crumb: '歴史と名前の由来',
+    headTitle: '歴史と名前の由来',
+    headLead: '「見帰り」という名の物語、滝と相知の暮らし、そしてあじさいの景観がどう生まれたのか。三つの物語からご紹介します。',
+  },
+  en: {
+    title: `History & Name of ${entity.fullNameEn} | Legends, Stone Buddhas, Dam & the Hydrangea Festival`,
+    description: `The origin and history of ${entity.fullNameEn}: the stone Buddhas on the right bank, the Ikisagawa Dam, the start of the hydrangea festival, and Arito’s history — legends and official records kept distinct.`,
+    crumb: 'History',
+    headTitle: 'History & the name',
+    headLead: 'The tale of “Mikaeri”, the falls and life in Arito, and how the hydrangea landscape began — told through three stories.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 的歷史與名稱由來｜石佛・水壩・繡球花祭的演進`,
+    description: `${entity.fullName}的名稱由來與歷史：右岸石佛、伊岐佐川水壩、繡球花祭的開始，以及相知的歷史，區分傳說與官方記錄介紹。`,
+    crumb: '歷史與名稱由來',
+    headTitle: '歷史與名稱由來',
+    headLead: '「見歸」之名的故事、瀑布與相知的生活，以及繡球花景觀如何誕生，以三則故事介紹。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/history" crumb={m.crumb}>
+  <PageHead crumb="HISTORY" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">Story 01</p>
+      <h2 class="section-title">{t({ ja: 'なぜ「見帰り」と呼ばれるのか', en: 'Why “Mikaeri”?', 'zh-Hant': '為何稱為「見歸」' })}</h2>
+      <p class="lead">{t({ ja: '名前の由来には、いくつかの言い伝えがあります。地元に広く伝わるのは——一度その場を離れても、坂道を戻ってもう一度見たくなるほど美しい、という物語です。', en: 'Several tales surround the name. The one locals tell most widely: so beautiful that, having left, you climb back up the slope for “one more look”.', 'zh-Hant': '名稱由來有幾則傳說。地方流傳最廣的是——離去後仍美得讓人回頭爬坡「再看一次」。' })}</p>
+      <p style="color:rgba(41,49,46,.8)">{t({ ja: '正式な表記は「見帰りの滝」。よく見かける「見返りの滝」は一般的な誤記です。この名の由来は、確定した史実というより、地域に受け継がれてきた物語として語られています。だからこそ、季節ごとに人々が「また見に帰りたい」と足を運んできたのでしょう。', en: 'The official spelling is 見帰りの滝; the common “見返りの滝” is a misspelling. The name’s origin is less established history than a story handed down locally — which is why, season after season, people come back “to see it again”.', 'zh-Hant': '正式表記為「見歸里之瀧」，常見的「見返里之瀧」是誤寫。名稱由來與其說是確定史實，不如說是地方傳承的故事——也正因如此，人們才會每季「想再回來看」。' })}</p>
+      <p class="notice">{t({ ja: 'この由来は<strong>地域に伝わる言い伝え</strong>としてご紹介しています。', en: 'This origin is introduced as a <strong>local legend</strong>.', 'zh-Hant': '此由來以<strong>地方傳說</strong>介紹。' })}</p>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow">
+      <p class="eyebrow">Story 02</p>
+      <h2 class="section-title">{t({ ja: '滝と、相知の暮らし', en: 'The falls & life in Arito', 'zh-Hant': '瀑布與相知的生活' })}</h2>
+      <p class="lead">{t({ ja: '見帰りの滝は、佐賀県唐津市相知町、天山県立自然公園の渓谷にあります。水流と岩壁、そして深い森が一体となって、この景観をつくっています。', en: `${entity.fullName} sits in the gorge of Arito, Karatsu, Saga, inside the Tenzan Prefectural Natural Park. Flow, rock face and deep forest together shape this landscape.`, 'zh-Hant': `${entity.fullName}位於佐賀縣唐津市相知町、天山縣立自然公園的溪谷。水流、岩壁與深林共同構成此景觀。` })}</p>
+      <p style="color:rgba(41,49,46,.8)">{t({ ja: '古くから地域の人々の暮らしとともにあり、やがて相知は、この滝を季節ごとに楽しめる観光地として育ててきました。日本の滝百選にも選ばれ、遠くからも人が訪れる名瀑となっています。', en: 'Long part of local life, Arito gradually nurtured the falls into a seasonal tourist spot, and it was chosen among Japan’s 100 Selected Falls — a famed waterfall drawing visitors from afar.', 'zh-Hant': '自古與地方生活相伴，相知逐漸將瀑布培育成可四季遊賞的景點，並入選日本瀑布百選，成為遠方來客的名瀑。' })}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">Story 03</p>
+      <h2 class="section-title">{t({ ja: 'あじさいの景観は、どう生まれたか', en: 'How the hydrangea landscape began', 'zh-Hant': '繡球花景觀如何誕生' })}</h2>
+      <p class="lead">{t({ ja: '今では滝の代名詞ともいえるあじさい。その景観は、地域の人々が渓谷沿いにあじさいを植え続けてきたことから生まれました。', en: 'Hydrangea is now almost synonymous with the falls. The landscape was born from locals keep planting hydrangea along the gorge.', 'zh-Hant': '如今繡球花幾乎是瀑布的代名詞。這片景觀源自居民持續在溪谷沿岸栽植繡球花。' })}</p>
+      <p style="color:rgba(41,49,46,.8)">{t({ ja: 'やがて花は約50種・4万株にまで広がり、毎年6月には「あじさい祭り」が催されるようになりました。滝とあじさいの共演は、人の手と時間が育てた、この土地ならではの風景です。', en: 'The blooms grew to about 50 varieties and 40,000 plants, and every June the “Hydrangea Festival” is held. The falls-and-hydrangea pairing is a landscape raised by human hands and time.', 'zh-Hant': '花朵終於擴展到約50種・4萬株，每年6月舉辦「繡球花祭」。瀑布與繡球花的共演，是人手與時間培育出的在地風景。' })}</p>
+
+      <div class="spacer"></div>
+      <p class="eyebrow">Timeline</p>
+      <h3 style="font-size:1.4rem;margin:0 0 24px">{t({ ja: '見どころの成り立ち', en: 'How the highlights formed', 'zh-Hant': '看點的成形' })}</h3>
+      <ul class="timeline">
+        {timeline[locale].map((li) => (
+          <li><span class="yr">{li.yr}</span><span class={`tag-src ${li.kindClass}`}>{li.kindLabel}</span><h3>{li.title}</h3><p>{li.body}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Story archive</p>
+      <h2 class="section-title">
+        {t({ ja: '物語・伝承・記録', en: 'Legends, records & local history', 'zh-Hant': '傳說・記錄・地方史' })}<span class="h2-en">{t({ ja: 'Legends, records & local history', en: 'Legends, records & local history', 'zh-Hant': 'Legends, records & local history' })}</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:28px">
+        {t({ ja: '史実として確認できること、地域に伝わる物語、編集部が一般的な知見として整理した解説。性格の違いを明示して紹介します。', en: 'What is confirmed as fact, tales passed down locally, and notes we organise as general knowledge — presented with their nature made clear.', 'zh-Hant': '可確認為史實者、地方流傳的故事，以及我們整理為一般知識的說明，並標明性質差異。' })}
+      </p>
+      <div class="grid grid-2">
+        {
+          stories.map((s) => (
+            <article class="card">
+              <p class="story__meta">
+                <span class="yr">{t(s.era)}</span>
+                <span class={`tag-src ${kindClass[s.kind]}`}>{t(kindLabel[s.kind])}</span>
+              </p>
+              <h3>{t(s.title)}</h3>
+              <p style="color:rgba(41,49,46,.85)">{t(s.body)}</p>
+              {s.note && <p class="facility__caution">※ {t(s.note)}</p>}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Science</p>
+      <h2 class="section-title">{t({ ja: '地形・水・生きものから見る滝', en: 'The falls through terrain, water & life', 'zh-Hant': '從地形・水・生物看瀑布' })}</h2>
+      <p class="lead">
+        {t({ ja: 'なぜこの場所に落差100mの滝ができたのか。水はどこから来て、どんな生きものが暮らしているのか。科学的な背景を知ると、滝の見え方がもう一段深くなります。', en: 'Why a 100 m falls here? Where does the water come from, and what lives here? Knowing the science deepens how you see the falls.', 'zh-Hant': '為何此處有落差100m的瀑布？水從何而來、住著哪些生物？了解科學背景，看瀑布的角度更深一層。' })}
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px">
+        <a class="btn btn--outline" href={localeUrlSafe('/#science', locale)}>{t({ ja: '科学で読み解く →', en: 'Read the science →', 'zh-Hant': '用科學解讀 →' })}</a>
+        <a class="btn btn--outline" href={localeUrlSafe('/facilities', locale)}>{t({ ja: '施設・サービス →', en: 'Facilities & services →', 'zh-Hant': '設施與服務 →' })}</a>
+      </div>
+    </div>
+  </section>
+</Base>

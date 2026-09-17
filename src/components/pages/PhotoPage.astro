@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { gallery, photoTips, credits } from '../../data/photos';
+import { entity } from '../../data/entity';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: '見帰りの滝の写真スポット｜あじさい・全景・水しぶき・ライトアップ',
+    description: '見帰りの滝の撮影スポットとギャラリー。あじさいの前景、滝の全景、水しぶきの近景、雨の日、夜のライトアップの撮り方と、写真クレジットをまとめました。',
+    crumb: '写真',
+    headTitle: '写真スポット',
+    headLead: 'あじさいの前景、滝の全景、水しぶきの近景、雨の日、そして夜のライトアップ。見帰りの滝を美しく残すためのヒントとギャラリーです。',
+  },
+  en: {
+    title: `Photo Spots at ${entity.fullNameEn} | Hydrangea, Full View, Spray & Light-up`,
+    description: `Photo spots and a gallery for ${entity.fullNameEn}: hydrangea foreground, full view, spray close-up, rainy days and the night light-up — plus photo credits.`,
+    crumb: 'Photos',
+    headTitle: 'Photo spots',
+    headLead: 'Hydrangea foreground, full view, spray close-up, rainy days, and the night light-up. Tips and a gallery to capture Mikaeri No Taki beautifully.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 攝影景點｜繡球花・全景・水花・點燈`,
+    description: `${entity.fullName}的攝影景點與圖輯：繡球花前景、瀑布全景、水花近景、雨天與夜間點燈，並附照片出處。`,
+    crumb: '照片',
+    headTitle: '攝影景點',
+    headLead: '繡球花前景、瀑布全景、水花近景、雨天，以及夜間點燈。留下見歸里之瀧美照的訣竅與圖輯。',
+  },
+} as const;
+const m = meta[locale];
+
+const creditHead = {
+  ja: ['作品', '撮影', 'ライセンス', '出典'],
+  en: ['Work', 'Photographer', 'License', 'Source'],
+  'zh-Hant': ['作品', '攝影', '授權', '出處'],
+};
+const creditNote = {
+  ja: '出典：Wikimedia Commons。各ライセンスの詳細はリンク先をご確認ください。',
+  en: 'Source: Wikimedia Commons. See the links for each licence’s details.',
+  'zh-Hant': '出處：Wikimedia Commons。各授權詳情請見連結。',
+};
+---
+<Base title={m.title} description={m.description} locale={locale} active="/photo" crumb={m.crumb}>
+  <PageHead crumb="PHOTO" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Where to shoot</p>
+      <h2 class="section-title">{t({ ja: '撮影のヒント', en: 'Photo tips', 'zh-Hant': '拍攝訣竅' })}</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        {photoTips.map((tip) => (
+          <div class="card"><h3>{t(tip.title)}</h3><p>{t(tip.body)}</p></div>
+        ))}
+      </div>
+      <div class="notice warn" style="margin-top:24px"><strong>{t({ ja: '夜のライトアップ：', en: 'Night light-up: ', 'zh-Hant': '夜間點燈：' })}</strong>{t({ ja: '時期によって滝がライトアップされます。期間や時間は変わることがあるため、お出かけ前に最新の案内をご確認ください。', en: 'The falls may be lit up in certain periods. Dates and times can change, so check the latest notice before going.', 'zh-Hant': '部分時期瀑布會點燈。期間與時間可能變動，出發前請確認最新公告。' })}</div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Gallery</p>
+      <h2 class="section-title">{t({ ja: 'ギャラリー', en: 'Gallery', 'zh-Hant': '圖輯' })}</h2>
+      <p class="section-lead" style="margin-bottom:28px">{t({ ja: '季節ごとの見帰りの滝。実際の風景をご覧ください。', en: 'Mikaeri No Taki through the seasons — see the real scenery.', 'zh-Hant': '四季的見歸里之瀧，請見實景。' })}</p>
+      <div class="gallery">
+        {gallery.map((g) => (
+          <figure><img src={g.src} alt={t(g.caption)} loading="lazy" /><figcaption>{t(g.caption)}</figcaption></figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="credits">
+    <div class="wrap narrow">
+      <p class="eyebrow">Photo credits</p>
+      <h2 class="section-title">{t({ ja: '写真クレジット', en: 'Photo credits', 'zh-Hant': '照片出處' })}</h2>
+      <p class="section-lead" style="margin-bottom:24px">{t({ ja: '当サイトの写真は、クリエイティブ・コモンズ・ライセンスのもとで公開されている作品を、各ライセンスの条件に従って使用しています。', en: 'Photos on this site are used under Creative Commons licences, in accordance with each licence’s terms.', 'zh-Hant': '本站照片依創用CC授權條款，使用公開於該授權下的作品。' })}</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>{creditHead[locale].map((h) => <th>{h}</th>)}</tr></thead>
+          <tbody>
+            {credits.map((c) => (
+              <tr>
+                <td>{c.title}</td>
+                <td>{c.author}</td>
+                <td class="en">{c.license}</td>
+                <td><a href={c.url} target="_blank" rel="noopener">出典</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.82rem;color:rgba(41,49,46,.6);margin-top:14px">{creditNote[locale]}</p>
+    </div>
+  </section>
+</Base>

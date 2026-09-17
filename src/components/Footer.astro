@@ -40,8 +40,8 @@ const sourcesHref = localeUrlSafe('', locale) + '#sources';
     </div>
     <hr class="rule" />
     <div class="fine">
-      <span>© <span data-year>2026</span> {site.name}ガイド</span>
-      <span>季節・開花・交通規制の情報は変わることがあります。<a href={photoHref + '#credits'} style="color:var(--sand)">{ui.footer.credits}</a> · <a href={sourcesHref} style="color:var(--sand)">{ui.footer.sources}</a></span>
+      <span>© <span data-year>2026</span> {site.name}{ui.footer.copyrightSuffix}</span>
+      <span>{ui.footer.seasonNote}<a href={photoHref + '#credits'} style="color:var(--sand)">{ui.footer.credits}</a> · <a href={sourcesHref} style="color:var(--sand)">{ui.footer.sources}</a></span>
     </div>
     <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin:14px 0 0">
       {ui.footer.disclaimer}

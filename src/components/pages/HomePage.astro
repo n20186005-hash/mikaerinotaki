@@ -1,0 +1,324 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import SeasonCard from '../SeasonCard.astro';
+import RouteSelector from '../RouteSelector.astro';
+import FAQ from '../FAQ.astro';
+import Reviews from '../Reviews.astro';
+import SourcesSection from '../SourcesSection.astro';
+import Weather from '../Weather.astro';
+import StrategyTable from '../StrategyTable.astro';
+import VisitPlans from '../VisitPlans.astro';
+import ScienceSection from '../ScienceSection.astro';
+import FacilityCard from '../FacilityCard.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { seasons } from '../../data/seasons';
+import { faqs } from '../../data/faq';
+import { courses } from '../../data/nearby';
+import { entity } from '../../data/entity';
+import { facilityGroups } from '../../data/facilities';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: `${entity.nameWithVariant} 観光ガイド｜日本の滝百選・あじさい・駐車場・ランチ`,
+    description: `${entity.state}${entity.city}・日本の滝百選「${entity.fullName}」（「見返りの滝」で検索されることもあります）。6月のあじさい、駐車場とアクセス、周辺ランチ、散策ルート、渓谷の天気までまとめた完全ガイド。`,
+  },
+  en: {
+    title: `${entity.fullNameEn} Travel Guide | Japan’s 100 Falls, Hydrangeas, Parking & Lunch`,
+    description: `${entity.fullName} (Mikaeri No Taki Falls) in ${entity.cityEn}, ${entity.stateEn} — one of Japan’s 100 Selected Falls. A complete guide to June hydrangeas, parking & access, lunch nearby, walking routes and the gorge’s weather.`,
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 旅遊指南｜日本瀑布百選・繡球花・停車・午餐`,
+    description: `位於${entity.state}${entity.city}的日本瀑布百選「${entity.fullName}」（也常以「見歸里之瀧」搜尋）。彙整6月繡球花、停車與交通、周邊午餐、散步路線與溪谷天氣的完整指南。`,
+  },
+} as const;
+const m = meta[locale];
+
+const homeSeasons = seasons.filter((s) => s.id !== 'winter');
+const homeFaqs = faqs.slice(0, 5);
+---
+<Base
+  title={m.title}
+  description={m.description}
+  preloadHero={true}
+  locale={locale}
+  faqs={homeFaqs}
+>
+  <Hero locale={locale} />
+
+  <!-- FACTS -->
+  <section class="section alt">
+    <div class="wrap">
+      <div class="facts">
+        <div class="cell"><div class="num">100<span style="font-size:1rem">{t({ ja: '選', en: '', 'zh-Hant': '選' })}</span></div><div class="lbl">{t({ ja: '日本の滝百選', en: 'Japan’s 100 Falls', 'zh-Hant': '日本瀑布百選' })}</div></div>
+        <div class="cell"><div class="num">50<span style="font-size:1rem">{t({ ja: '種', en: '', 'zh-Hant': '種' })}</span></div><div class="lbl">{t({ ja: '約4万株のあじさい', en: '~40,000 hydrangeas', 'zh-Hant': '約4萬株繡球花' })}</div></div>
+        <div class="cell"><div class="num">18<span style="font-size:1rem">{t({ ja: '分', en: 'min', 'zh-Hant': '分' })}</span></div><div class="lbl">{t({ ja: '唐津ICから車で約10km', en: '~10 km from Karatsu IC', 'zh-Hant': '唐津IC開車約10km' })}</div></div>
+        <div class="cell"><div class="num">60<span style="font-size:1rem">{t({ ja: '分', en: 'min', 'zh-Hant': '分' })}</span></div><div class="lbl">{t({ ja: '散策の目安時間', en: 'Walking time', 'zh-Hant': '散步預估時間' })}</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / ENTITY -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <p class="eyebrow">About</p>
+      <h2 class="section-title">
+        {t({ ja: `${entity.fullName}について`, en: `About ${entity.fullNameEn}`, 'zh-Hant': `關於${entity.fullName}` })}<span class="h2-en">{t({ ja: `About ${entity.fullNameEn} (${entity.cityEn})`, en: `About ${entity.fullNameEn} (${entity.cityEn})`, 'zh-Hant': `About ${entity.fullNameEn} (${entity.cityEn})` })}</span>
+      </h2>
+      <p class="section-lead">
+        <strong>{entity.fullName}</strong>（{entity.fullNameEn}、{t({ ja: `通称 ${entity.shortName}`, en: `also called ${entity.shortName}`, 'zh-Hant': `通稱${entity.shortName}` })}）{t({ ja: `は、${entity.state}${entity.city}${entity.streetAddress}・天山県立自然公園内にある滝です。${entity.country}の滝百選「日本の滝百選」のひとつで、落差は約100m。${entity.city}を代表する観光地として、季節ごとに多くの旅行者が訪れます。`, en: `is a waterfall in ${entity.streetAddress}, ${entity.cityEn}, inside the Tenzan Prefectural Natural Park. One of ${entity.countryEn}’s 100 Selected Falls, with a drop of about 100 m — a signature attraction of ${entity.cityEn} visited by many through the seasons.`, 'zh-Hant': `位於${entity.state}${entity.city}${entity.streetAddress}、天山縣立自然公園內的瀑布。是${entity.country}瀑布百選「日本瀑布百選」之一，落差約100m，為${entity.city}代表性景點，四季皆有眾多遊客造訪。` })}
+      </p>
+      <p style="margin-top:16px;font-size:.9rem;color:rgba(41,49,46,.8)">{t(entity.variantNote)}</p>
+      <p class="chain" aria-label={`${entity.fullName} → ${entity.city} → ${entity.state} → ${entity.country}`}>
+        <span>{entity.fullName}</span>
+        <span class="chain__sep" aria-hidden="true">→</span>
+        <span>{entity.city}</span>
+        <span class="chain__sep" aria-hidden="true">→</span>
+        <span>{entity.state}</span>
+        <span class="chain__sep" aria-hidden="true">→</span>
+        <span>{entity.country}</span>
+      </p>
+      <div class="grid grid-3" style="margin-top:26px">
+        <div class="card"><h3>{t({ ja: '日本の滝百選', en: 'Japan’s 100 Falls', 'zh-Hant': '日本瀑布百選' })}</h3><p>{t({ ja: `${entity.country}国内の代表的な100の滝に選定。${entity.state}屈指の落差を誇る名瀑です。`, en: `Selected among ${entity.countryEn}’s 100 representative falls — a famed waterfall with one of ${entity.stateEn}’s greatest drops.`, 'zh-Hant': `入選${entity.country}具代表性的100座瀑布，是擁有${entity.state}數一數二落差的名瀑。` })}</p></div>
+        <div class="card"><h3>{t({ ja: '落差 約100m', en: 'Drop ~100 m', 'zh-Hant': '落差 約100m' })}</h3><p>{t({ ja: '岩壁を一気に流れ落ちる水と水しぶき。遠景・橋の上・滝つぼ近くと、角度で表情が変わります。', en: 'Water and spray pour down the rock face at once — its look changes with the angle: distance, bridge, or pool side.', 'zh-Hant': '水流與水花沿岩壁傾瀉而下，遠景、橋上、瀑潭附近，角度不同風貌各異。' })}</p></div>
+        <div class="card"><h3>{t({ ja: '入場無料・年中開放', en: 'Free & open year-round', 'zh-Hant': '免費入場・全年開放' })}</h3><p>{t({ ja: '滝そのものの見学は無料。駐車場は通常期とあじさい祭り期間で運用が変わります。', en: 'Viewing the falls itself is free. Parking operation differs between the regular season and the hydrangea festival.', 'zh-Hant': '觀賞瀑布本身免費。停車場在平常期與繡球花祭期間的運作不同。' })}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="section" id="season">
+    <div class="wrap">
+      <p class="eyebrow">Why visit</p>
+      <h2 class="section-title">{t({ ja: '滝の高さより、季節と歩く体験。', en: 'More than height — the seasons and the walk.', 'zh-Hant': '勝過高度，是季節與散步的體驗。' })}</h2>
+      <p class="section-lead">{t({ ja: '見帰りの滝は一年を通して楽しめますが、その魅力は「いつ」「どの角度から」見るかで大きく変わります。訪れる前に、今の見どころを確かめてください。', en: 'Mikaeri No Taki can be enjoyed all year, but its charm changes greatly with when and from what angle you view it. Check today’s highlights before you go.', 'zh-Hant': '見歸里之瀧一年四季皆可遊賞，但其魅力會因「何時」「從何角度」觀看而大不同。出發前先確認當下看點。' })}</p>
+      <div class="reasons">
+        <div class="reason"><span class="n">01</span><h3>{t({ ja: '滝とあじさいの共演', en: 'Falls meet hydrangea', 'zh-Hant': '瀑布與繡球花共演' })}</h3><p>{t({ ja: '下流の渓谷に約50種・4万株のあじさいが植えられ、6月には青や紫の花越しに滝を望めます。九州でも有数の眺めです。', en: 'About 50 varieties and 40,000 hydrangeas line the lower gorge; in June you see the falls through blue and purple blooms — one of Kyushu’s finest views.', 'zh-Hant': '下游溪谷植有約50種・4萬株繡球花，6月可透過藍紫色花朵眺望瀑布，是九州數一數二的景色。' })}</p></div>
+        <div class="reason"><span class="n">02</span><h3>{t({ ja: '四季で変わる表情', en: 'A different face each season', 'zh-Hant': '四季變換的表情' })}</h3><p>{t({ ja: '春の河津桜、初夏のあじさいと蛍、盛夏の深緑と水しぶき、秋の紅葉。同じ渓谷が季節ごとにまったく違う姿を見せます。', en: 'Kawazu cherry in spring, hydrangea and fireflies in early summer, deep green and spray in midsummer, red leaves in autumn — the same gorge looks entirely different each season.', 'zh-Hant': '春有河津櫻、初夏繡球花與螢火蟲、盛夏深綠與水花、秋日紅葉，同一溪谷每季展現截然不同的姿態。' })}</p></div>
+        <div class="reason"><span class="n">03</span><h3>{t({ ja: '複数の観瀑ポイント', en: 'Several viewing points', 'zh-Hant': '多處觀瀑點' })}</h3><p>{t({ ja: '遠景の展望、橋の上、滝つぼ近く。歩く場所によって水の音も見え方も変化し、短い散策でも満足感があります。', en: 'Distant viewpoints, the bridge, and near the pool — the sound and the view shift as you walk, so even a short stroll feels rewarding.', 'zh-Hant': '遠景展望、橋上、瀑潭附近，隨著走動水聲與視角都會變化，短距離散步也頗有收穫。' })}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS (Google Maps) -->
+  <Reviews locale={locale} />
+
+  <!-- SEASONS -->
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Four seasons</p>
+      <h2 class="section-title">{t({ ja: '四季の見どころ', en: 'Seasonal highlights', 'zh-Hant': '四季看點' })}</h2>
+      <p class="section-lead" style="margin-bottom:34px">{t({ ja: 'それぞれの季節で、服装・混雑・撮影のコツが変わります。詳しくは四季ページへ。', en: 'Clothing, crowds and photo tips differ by season — see the seasons page for details.', 'zh-Hant': '各季的服裝、擁擠度與拍攝訣竅都不同，詳見四季頁面。' })}</p>
+      <div class="season-scroll">
+        {homeSeasons.map((s) => <SeasonCard season={s} locale={locale} />)}
+      </div>
+      <div style="margin-top:30px"><a class="btn btn--outline" href={localeUrlSafe('/seasons', locale)}>{t({ ja: '四季ページを見る →', en: 'See the seasons page →', 'zh-Hant': '查看四季頁面 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- WEATHER -->
+  <Weather locale={locale} />
+
+  <!-- SEASONAL STRATEGY -->
+  <StrategyTable locale={locale} />
+
+  <!-- ROUTE SELECTOR -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Plan your walk</p>
+      <h2 class="section-title">{t({ ja: '滞在時間で選ぶ散策ルート', en: 'Pick a route by your time', 'zh-Hant': '按停留時間選散步路線' })}</h2>
+      <p class="section-lead" style="margin-bottom:30px">{t({ ja: '使える時間を選ぶと、おすすめのまわり方が表示されます。', en: 'Choose how much time you have, and a recommended plan appears.', 'zh-Hant': '選擇可用時間，就會顯示推薦玩法。' })}</p>
+      <RouteSelector locale={locale} />
+      <div style="margin-top:26px"><a class="btn btn--outline" href={localeUrlSafe('/walk', locale)}>{t({ ja: '散策マップと詳細ルート →', en: 'Trail map & detailed routes →', 'zh-Hant': '散步地圖與詳細路線 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- PLANS BY VISITOR TYPE + HALF/FULL DAY -->
+  <VisitPlans locale={locale} />
+
+  <!-- AJISAI -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="split wide">
+        <div class="split__media"><img src="/images/ajisai.jpg" alt={t({ ja: '旅館と渓谷、前景にあじさいが咲く見帰りの滝の全景', en: 'Full view of Mikaeri No Taki with inn and gorge, hydrangea in the foreground', 'zh-Hant': '旅館與溪谷、前景繡球花盛開的見歸里之瀧全景' })} loading="lazy" /></div>
+        <div>
+          <p class="eyebrow">Hydrangea</p>
+          <h2 class="section-title" style="color:#fff">{t({ ja: 'あじさいと滝、<br />この滝いちばんの眺め。', en: 'Hydrangea & the falls —<br />the best view here.', 'zh-Hant': '繡球花與瀑布，<br />本地最棒的景致。' })}</h2>
+          <p style="color:rgba(255,255,255,.85)">{t({ ja: '下流の渓谷には約50種・4万株のあじさいが植えられ、例年6月に見頃を迎えます。青、紫、ピンクの花越しに眺める滝は、単なる「大きな滝」を超えた、この地ならではの風景です。', en: 'About 50 varieties and 40,000 hydrangeas line the lower gorge, usually peaking in June. The falls seen through blue, purple and pink blooms is a view unique to this place, beyond a mere “big waterfall”.', 'zh-Hant': '下游溪谷植有約50種・4萬株繡球花，通常6月盛開。透過藍、紫、粉色花朵眺望的瀑布，是超越「大瀑布」的在地獨有風景。' })}</p>
+          <p style="color:rgba(255,255,255,.85)">{t({ ja: '花期には交通規制や臨時駐車、シャトルの運行が行われることがあります。訪問前に最新の案内をご確認ください。', en: 'During bloom there may be traffic control, temporary parking and shuttle service — check the latest notice before visiting.', 'zh-Hant': '花期可能有交通管制、臨時停車與接駁巴士，出發前請確認最新公告。' })}</p>
+          <a class="btn btn--primary" href={localeUrlSafe('/ajisai', locale)} style="margin-top:8px">{t({ ja: 'あじさい特集を見る', en: 'See the hydrangea feature', 'zh-Hant': '查看繡球花特輯' })}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAME -->
+  <section class="section alt">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Origin of the name</p>
+      <h2 class="section-title">
+        {t({ ja: 'なぜ「見帰り」と呼ばれるのか', en: 'Why “Mikaeri”?', 'zh-Hant': '為何稱為「見歸」' })}<span class="h2-en">{t({ ja: `History & Significance of ${entity.fullNameEn}`, en: `History & Significance of ${entity.fullNameEn}`, 'zh-Hant': `History & Significance of ${entity.fullNameEn}` })}</span>
+      </h2>
+      <p class="lead">{t({ ja: '名前の由来には、いくつかの言い伝えがあります。地元に広く伝わるのは——<br />一度その場を離れても、坂道を戻ってもう一度見たくなるほど美しい、という物語です。', en: 'There are several tales about the name. The one locals tell most widely: so beautiful that, having left, you climb back up the slope for “one more look”.', 'zh-Hant': '名稱由來有幾則傳說。地方流傳最廣的是——離去後仍美得讓人回頭爬坡「再看一次」。' })}</p>
+      <p style="color:rgba(41,49,46,.75)">{t({ ja: '正式な表記は「見帰りの滝」。よく見かける「見返りの滝」は一般的な誤記です。名称の由来は地方に伝わる物語として、滝と相知の歴史、あじさいの景観の成り立ちとあわせてご紹介します。', en: 'The official spelling is 見帰りの滝; the common “見返りの滝” is a misspelling. We introduce the name’s origin as a local tale, together with the falls’ and Arito’s history and how the hydrangea landscape began.', 'zh-Hant': '正式表記為「見歸里之瀧」，常見的「見返里之瀧」是誤寫。我們以地方傳說介紹名稱由來，並結合瀑布與相知的歷史、繡球花景觀的由來。' })}</p>
+      <a class="btn btn--outline" href={localeUrlSafe('/history', locale)} style="margin-top:10px">{t({ ja: '歴史と名前の物語 →', en: 'History & the name →', 'zh-Hant': '歷史與名稱故事 →' })}</a>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Access &amp; parking</p>
+      <h2 class="section-title">
+        {t({ ja: '交通と駐車場', en: 'Access & parking', 'zh-Hant': '交通與停車場' })}<span class="h2-en">{t({ ja: `Location & How to Visit ${entity.shortName} in ${entity.cityEn}`, en: `Location & How to Visit ${entity.shortName} in ${entity.cityEn}`, 'zh-Hant': `Location & How to Visit ${entity.shortName} in ${entity.cityEn}` })}</span>
+      </h2>
+      <div class="grid grid-3" style="margin-top:30px">
+        <div class="card"><div class="ico" aria-hidden="true">🚗</div><h3>{t({ ja: '車で', en: 'By car', 'zh-Hant': '開車' })}</h3><p>{t({ ja: '唐津ICから約10km・18分。多久ICから約20km・25分。ナビは「見帰りの滝」で検索できます。', en: '~10 km / 18 min from Karatsu IC, ~20 km / 25 min from Taku IC. Search “Mikaeri No Taki” in your nav.', 'zh-Hant': '唐津IC約10km・18分，多久IC約20km・25分。導航搜尋「見歸里之瀧」即可。' })}</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🚉</div><h3>{t({ ja: '公共交通', en: 'Public transport', 'zh-Hant': '大眾運輸' })}</h3><p>{t({ ja: 'JR唐津線「相知駅」下車。駅からタクシーで約7〜8分。本数が少ないため事前確認がおすすめです。', en: 'Get off at Arito Station (JR Karatsu Line); ~7–8 min by taxi from there. Services are few, so check ahead.', 'zh-Hant': 'JR唐津線「相知站」下車，車站轉計程車約7〜8分。班次少，建議事先確認。' })}</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🅿️</div><h3>{t({ ja: '駐車場', en: 'Parking', 'zh-Hant': '停車場' })}</h3><p>{t({ ja: '清流荘前・都荘前・蛍橋前などに普通車あわせて約50台。あじさい祭り期間は運用が変わります。', en: 'About 50 car spaces total near Seiryuso, Tosō and Hotaribashi. Operation changes during the festival.', 'zh-Hant': '清流莊前、都莊前、螢橋前等共約50個小客車車位，繡球花祭期間運作會改變。' })}</p></div>
+      </div>
+      <div class="notice" style="margin-top:26px"><strong>{t({ ja: 'ポイント：', en: 'Tip: ', 'zh-Hant': '重點：' })}</strong>{t({ ja: '通常期とあじさい祭り期間では、使える駐車場・料金・交通規制が異なります。時期に合わせて確認してください。', en: 'The parking, fees and traffic control differ between the regular season and the festival — check by period.', 'zh-Hant': '平常期與繡球花祭期間，可用停車場、收費與交通管制不同，請依時期確認。' })}</div>
+      <div style="margin-top:24px"><a class="btn btn--dark" href={localeUrlSafe('/access', locale)}>{t({ ja: 'アクセス・駐車場の詳細 →', en: 'Access & parking details →', 'zh-Hant': '交通與停車場詳細 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- LOCATION / MAP -->
+  <section class="section alt" id="location">
+    <div class="wrap">
+      <p class="eyebrow">Location</p>
+      <h2 class="section-title">
+        {t({ ja: '位置情報と地図', en: 'Location & map', 'zh-Hant': '位置資訊與地圖' })}<span class="h2-en">{t({ ja: `Where is ${entity.fullNameEn}?`, en: `Where is ${entity.fullNameEn}?`, 'zh-Hant': `Where is ${entity.fullNameEn}?` })}</span>
+      </h2>
+      <div class="loc">
+        <div class="loc__map">
+          <iframe
+            src={entity.mapsEmbedSrc}
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title={`${entity.fullName}（${entity.fullNameEn}）の地図`}></iframe>
+        </div>
+        <div class="loc__info">
+          <dl class="loc__dl">
+            <dt>{t({ ja: '所在地', en: 'Address', 'zh-Hant': '所在地' })}</dt>
+            <dd>〒{entity.postalCode} {entity.state}{entity.city}{entity.streetAddress}（{entity.streetAddressEn}, {entity.cityEn}, {entity.stateEn}）</dd>
+            <dt>{t({ ja: '座標', en: 'Coordinates', 'zh-Hant': '座標' })}</dt>
+            <dd class="en">N {entity.latitude} / E {entity.longitude}</dd>
+            <dt>{t({ ja: 'アクセス', en: 'Access', 'zh-Hant': '交通' })}</dt>
+            <dd>{t({ ja: '唐津ICから約10km・18分。JR唐津線「相知駅」からタクシーで約7〜8分。', en: '~10 km / 18 min from Karatsu IC; ~7–8 min by taxi from Arito Station (JR Karatsu Line).', 'zh-Hant': '唐津IC約10km・18分，JR唐津線「相知站」轉計程車約7〜8分。' })}</dd>
+          </dl>
+          <div class="loc__links">
+            <a class="btn btn--dark" href={entity.mapsShareUrl} target="_blank" rel="noopener noreferrer">
+              {t({ ja: 'Google マップで開く ↗', en: 'Open in Google Maps ↗', 'zh-Hant': '在地圖中開啟 ↗' })}
+            </a>
+            <a class="btn btn--outline" href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">
+              {entity.govtTourismName} ↗
+            </a>
+          </div>
+          <p style="font-size:.86rem;color:rgba(41,49,46,.7);margin-top:16px">
+            {t({ ja: '最新情報や地域の観光案内は', en: 'For official updates and regional tourism information, visit', 'zh-Hant': '最新資訊與地方觀光指南，請見' })}
+            <a href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">
+              {entity.countryEn} / {entity.stateEn} Official Tourism Portal </a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOD -->
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Local food</p>
+      <h2 class="section-title">{t({ ja: '滝のあとに味わう、相知の味', en: 'Arito flavours after the falls', 'zh-Hant': '瀑布之後，品嚐相知之味' })}</h2>
+      <p class="section-lead" style="margin-bottom:30px">{t({ ja: '滝の周辺は飲食店が多くありません。だからこそ、確かめて選んだ滝周辺のお店と、唐津まで足を延ばす“ついでグルメ”を分けてご案内します。', en: 'Few eateries right by the falls. So we split vetted spots near the falls from “detour gourmet” out toward Karatsu.', 'zh-Hant': '瀑布周邊餐飲不多，因此我們把勘察過的瀑布附近店家，與延伸到唐津的「順遊美食」分開介紹。' })}</p>
+      <div class="grid grid-2">
+        <div class="card"><h3>{t({ ja: '滝のすぐそば', en: 'Right by the falls', 'zh-Hant': '瀑布正旁' })}</h3><p>{t({ ja: '渓谷沿いの宿でいただく、相知の川魚料理。歩いたあとの一食にふさわしい、この土地ならではの味です。訪問前の電話確認がおすすめです。', en: 'River-fish dishes at inns along the gorge — a local taste fit for a meal after walking. Call ahead before visiting.', 'zh-Hant': '溪谷沿岸旅館的相知川魚料理，是散步後合適的在地之味，建議前往前先電話確認。' })}</p></div>
+        <div class="card"><h3>{t({ ja: '唐津まで足をのばして', en: 'Out to Karatsu', 'zh-Hant': '延伸到唐津' })}</h3><p>{t({ ja: '呼子のイカ、佐賀牛、唐津バーガー、唐津茶。滝の帰り道に立ち寄れる、唐津エリアを代表するグルメです。', en: 'Yobuko squid, Saga beef, Karatsu burger, Karatsu tea — representative Karatsu-area gourmet on the way home.', 'zh-Hant': '呼子烏賊、佐賀牛、唐津漢堡、唐津茶，是返程可順遊的唐津代表美食。' })}</p></div>
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href={localeUrlSafe('/food', locale)}>{t({ ja: '周辺グルメを見る →', en: 'See local food →', 'zh-Hant': '查看周邊美食 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- COURSES -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Model courses</p>
+      <h2 class="section-title">
+        {t({ ja: '半日・一日のモデルコース', en: 'Half- & full-day courses', 'zh-Hant': '半日・一日行程' })}<span class="h2-en">{t({ ja: `Landmarks & Attractions Around ${entity.shortName}`, en: `Landmarks & Attractions Around ${entity.shortName}`, 'zh-Hant': `Landmarks & Attractions Around ${entity.shortName}` })}</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:30px">
+        {t({ ja: `滝だけなら1〜2時間。周辺とつなげば、相知・厳木・唐津をめぐる充実した一日になります。${entity.fullName}を訪れる際は、周辺の史跡や自然景観——`, en: `Just the falls is 1–2 hours. Tie in the surroundings for a full day around Arito, Kishima and Karatsu. When visiting ${entity.fullNameEn}, also tour nearby historic sites and scenery —`, 'zh-Hant': `只看瀑布約1〜2小時。結合周邊就是暢遊相知、嚴木、唐津的充實一日。造訪${entity.fullName}時，也可一併巡遊周邊史跡與自然景觀——` })}<strong>{entity.nearbyLandmark1}</strong>{t({ ja: 'や', en: ' and ', 'zh-Hant': '與' })}<strong>{entity.nearbyLandmark2}</strong>{t({ ja: '——もあわせて巡ることができます。', en: '.', 'zh-Hant': '——。' })}
+      </p>
+      <div class="grid grid-2">
+        {courses.map((c) => (
+          <div class="card"><h3>{c.letter} ｜ {t(c.title)}</h3><p>{c.steps.map((s) => t(s)).join(' → ')}</p></div>
+        ))}
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href={localeUrlSafe('/nearby', locale)}>{t({ ja: 'モデルコースの詳細 →', en: 'Course details →', 'zh-Hant': '行程詳細 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Facilities</p>
+      <h2 class="section-title">
+        {t({ ja: '訪客サービスと周辺施設', en: 'Facilities & services', 'zh-Hant': '訪客設施與周邊' })}<span class="h2-en">{t({ ja: `Facilities & services near ${entity.fullNameEn}`, en: `Facilities & services near ${entity.fullNameEn}`, 'zh-Hant': `Facilities & services near ${entity.fullNameEn}` })}</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:26px">
+        {t({ ja: 'トイレ・駐車場・飲食・宿泊・買い物・給油やEV充電まで。種類ごとに中立的にまとめています（当サイトは特定の店舗を紹介しません）。', en: 'Toilets, parking, food, stays, shopping, fuel and EV charging — summarised neutrally by type (we recommend no specific shop).', 'zh-Hant': '廁所、停車、餐飲、住宿、購物、加油與EV充電，按類型中立整理（本站不推薦特定店家）。' })}
+      </p>
+      <div class="grid grid-3">
+        {facilityGroups.slice(0, 3).map((g) => <FacilityCard group={g} locale={locale} />)}
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href={localeUrlSafe('/facilities', locale)}>{t({ ja: '施設・サービスの一覧 →', en: 'All facilities & services →', 'zh-Hant': '設施與服務一覽 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="section alt">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Before you go</p>
+          <h2 class="section-title">{t({ ja: '雨の日と、安全のこと', en: 'Rainy days & safety', 'zh-Hant': '雨天與安全' })}</h2>
+          <p class="section-lead">{t({ ja: '雨は「行かない理由」ではありません。曇りや小雨の日はあじさいの色がやわらく、渓谷に霧が立ちます。ただし足元は滑りやすくなります。', en: 'Rain is not a reason to skip. On cloudy or light-rain days the hydrangea colours soften and mist rises in the gorge — but footing gets slippery.', 'zh-Hant': '雨不是「不去了」的理由。陰天或細雨時繡球花色澤柔和、溪谷起霧，但腳下會變濕滑。' })}</p>
+          <ul class="checklist" style="margin-top:20px">
+            <li>{t({ ja: '石段・濡れた岩は滑りやすい。滑りにくい靴で', en: 'Stone steps & wet rock are slippery — wear grippy shoes', 'zh-Hant': '石階與濕岩易滑，穿止滑鞋' })}</li>
+            <li>{t({ ja: 'ベビーカーは段差が多く、抱っこ紐が安心', en: 'Many steps with a stroller — a carrier is safer', 'zh-Hant': '推嬰兒車落差多，背帶更安心' })}</li>
+            <li>{t({ ja: '水しぶきの近くではカメラ・スマホの防水を', en: 'Waterproof your camera/phone near the spray', 'zh-Hant': '水花附近請為相機手機防水' })}</li>
+            <li>{t({ ja: '夏は虫よけ、夕方以降は羽織るものを', en: 'Repellent in summer; a layer from evening on', 'zh-Hant': '夏天防蚊，傍晚後加件薄衣' })}</li>
+            <li>{t({ ja: '川の増水時は無理に近づかない', en: 'Don’t approach when the river is swollen', 'zh-Hant': '河水漲時勿勉強靠近' })}</li>
+          </ul>
+        </div>
+        <div class="split__media"><img src="/images/falls.jpg" alt={t({ ja: '岩壁を流れ落ちる見帰りの滝の全景', en: 'Full view of Mikaeri No Taki down the rock face', 'zh-Hant': '沿岩壁傾瀉的見歸里之瀧全景' })} loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCIENCE & RESPONSIBILITY -->
+  <ScienceSection locale={locale} />
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="section-title">{t({ ja: 'よくある質問', en: 'Frequently asked questions', 'zh-Hant': '常見問題' })}</h2>
+      <div style="margin-top:20px"><FAQ items={homeFaqs} locale={locale} /></div>
+      <div style="margin-top:24px"><a class="btn btn--outline" href={localeUrlSafe('/faq', locale)}>{t({ ja: 'すべての質問を見る →', en: 'See all questions →', 'zh-Hant': '查看所有問題 →' })}</a></div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <SourcesSection locale={locale} />
+</Base>

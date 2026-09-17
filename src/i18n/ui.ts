@@ -76,6 +76,8 @@ export interface UiStrings {
     credits: string;
     sources: string;
     disclaimer: string;
+    copyrightSuffix: string;
+    seasonNote: string;
   };
   langLabel: string;
   langAria: string;
@@ -109,6 +111,8 @@ const ui: Record<Locale, UiStrings> = {
       sources: '情報源',
       disclaimer:
         '本サイトは見帰りの滝を紹介する独立した旅行ガイドです。見帰りの滝および周辺施設の公式サイトではありません。',
+      copyrightSuffix: 'ガイド',
+      seasonNote: '季節・開花・交通規制の情報は変わることがあります。',
     },
     langLabel: '言語',
     langAria: '言語を選択',
@@ -140,6 +144,8 @@ const ui: Record<Locale, UiStrings> = {
       sources: 'Sources',
       disclaimer:
         'This is an independent travel guide introducing Mikaeri No Taki Falls. It is not the official site of the falls or surrounding facilities.',
+      copyrightSuffix: ' Guide',
+      seasonNote: 'Seasons, blooms and traffic control can change.',
     },
     langLabel: 'Language',
     langAria: 'Select language',
@@ -171,6 +177,8 @@ const ui: Record<Locale, UiStrings> = {
       sources: '資料來源',
       disclaimer:
         '本網站是介紹見歸里之瀧（見帰りの滝）的獨立旅行指南，並非瀑布或周邊設施的官方網站。',
+      copyrightSuffix: '指南',
+      seasonNote: '季節、開花與交通管制可能變動。',
     },
     langLabel: '語言',
     langAria: '選擇語言',

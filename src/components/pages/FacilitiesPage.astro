@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import FacilityCard from '../FacilityCard.astro';
+import { L, type Localized } from '../../i18n/types';
+import { localeUrlSafe, type Locale } from '../../i18n/config';
+import { facilityGroups } from '../../data/facilities';
+import { visitorDuties } from '../../data/science';
+import { entity } from '../../data/entity';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: `${entity.fullName} 周辺の施設・サービス｜トイレ・駐車場・飲食・宿泊・給油・EV充電`,
+    description: `${entity.fullName}（${entity.city}）周辺のトイレ、駐車場、飲食・宿泊・買い物・給油やEV充電、医療・アクセシビリティを種別ごとに中立的にまとめました。特定の店舗は紹介しません。`,
+    crumb: '施設・サービス',
+    headTitle: '訪客サービスと周辺施設',
+    headLead: 'トイレ・駐車場・飲食・宿泊・買い物・給油・EV充電・医療まで。「どんな種類の施設が、どの範囲にあるか」を種別でまとめました。',
+  },
+  en: {
+    title: `Facilities & Services near ${entity.fullNameEn} | Toilets, Parking, Food, Stay, Fuel & EV`,
+    description: `Toilets, parking, food, stays, shopping, fuel and EV charging, medical care and accessibility around ${entity.fullNameEn} (${entity.cityEn}) — summarised neutrally by type. No specific shop is recommended.`,
+    crumb: 'Facilities',
+    headTitle: 'Visitor services & nearby facilities',
+    headLead: 'From toilets and parking to food, stays, shopping, fuel/EV, medical and accessibility — grouped by type to show what kinds of facilities exist and within what range.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 周邊設施與服務｜廁所・停車・餐飲・住宿・加油・EV`,
+    description: `${entity.fullName}（${entity.city}）周邊的廁所、停車、餐飲・住宿・購物・加油與EV充電、醫療・無障礙，按類型中立整理。不推薦特定店家。`,
+    crumb: '設施・服務',
+    headTitle: '訪客設施與周邊',
+    headLead: '從廁所、停車到餐飲、住宿、購物、加油EV、醫療與無障礙，按類型整理「有哪些設施、範圍多大」。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/facilities" crumb={m.crumb}>
+  <PageHead crumb="FACILITIES" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="notice" style="margin-bottom:30px">
+        <strong>{t({ ja: 'このページの方針：', en: 'Our approach: ', 'zh-Hant': '本頁方針：' })}</strong>{t({ ja: '当サイトは非営利の解説サイトです。特定の店舗名・施設名は紹介せず、<strong>施設の種類と、おおよその範囲・距離感</strong>のみをまとめています。営業状況や台数は変わるため、最新情報は現地の案内・公式情報でご確認ください。', en: 'This is a non-profit guide. We name no specific shop or facility, summarising only the <strong>type of facility and its rough range / distance</strong>. Hours and capacity change — check local signage or official info for the latest.', 'zh-Hant': '本站為非營利解說站。不介紹特定店家或設施名，僅整理<strong>設施類型與大致範圍・距離感</strong>。營業與車位會變動，最新資訊請查現場指引或官方資訊。' })}
+      </div>
+      <div class="grid grid-2">
+        {facilityGroups.map((g) => <FacilityCard group={g} locale={locale} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Etiquette</p>
+      <h2 class="section-title">{t({ ja: '滞在を快適にする心得', en: 'For a comfortable visit', 'zh-Hant': '讓停留更舒適的心得' })}</h2>
+      <div class="grid grid-2" style="margin-top:26px">
+        {
+          visitorDuties.slice(0, 4).map((d) => (
+            <div class="duty">
+              <span class="duty__icon" aria-hidden="true">{d.icon}</span>
+              <div><h3>{t(d.title)}</h3><p>{t(d.body)}</p></div>
+            </div>
+          ))
+        }
+      </div>
+      <div style="margin-top:26px">
+        <a class="btn btn--outline" href={localeUrlSafe('/access', locale)}>{t({ ja: 'アクセス・駐車場の詳細 →', en: 'Access & parking details →', 'zh-Hant': '交通與停車場詳細 →' })}</a>
+        <a class="btn btn--outline" href={localeUrlSafe('/food', locale)}>{t({ ja: '食事のタイプ別まとめ →', en: 'Food by type →', 'zh-Hant': '餐飲按類型整理 →' })}</a>
+      </div>
+    </div>
+  </section>
+</Base>

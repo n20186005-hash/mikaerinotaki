@@ -16,8 +16,8 @@ export const LOCALE_META: Record<Locale, { label: string; htmlLang: string; ogLo
 
 /** 各非默认语系中，已提供译文的 slug（'' = 首页）。ja 默认拥有全部页面。 */
 export const translatedSlugs: Record<Exclude<Locale, 'ja'>, string[]> = {
-  en: ['access', 'ajisai', 'food', 'faq'],
-  'zh-Hant': ['access', 'ajisai', 'food', 'faq'],
+  en: ['', 'access', 'ajisai', 'food', 'faq', 'seasons', 'facilities', 'nearby', 'photo', 'history', 'walk'],
+  'zh-Hant': ['', 'access', 'ajisai', 'food', 'faq', 'seasons', 'facilities', 'nearby', 'photo', 'history', 'walk'],
 };
 
 /** 全站路由（slug，'' = 首页），sitemap 使用 */
@@ -49,9 +49,15 @@ export function localeUrl(slug: string, locale: Locale): string {
   return `/${locale}${path === '/' ? '/' : path}`;
 }
 
-/** 若目标语系有该页译文则用语系路径，否则回退到 ja 路径（避免 404） */
+/** 若目标语系有该页译文则用语系路径，否则回退到 ja 路径（避免 404）。保留 #hash 锚点。 */
 export function localeUrlSafe(slug: string, locale: Locale): string {
-  return hasTranslation(locale, slug) ? localeUrl(slug, locale) : localeUrl(slug, 'ja');
+  if (locale === 'ja') return slug;
+  const hashIndex = slug.indexOf('#');
+  const path = hashIndex >= 0 ? slug.slice(0, hashIndex) : slug;
+  const hash = hashIndex >= 0 ? slug.slice(hashIndex) : '';
+  const s = path.replace(/^\/+/, '');
+  const localized = hasTranslation(locale, s) ? localeUrl(s, locale) : localeUrl(s, 'ja');
+  return localized + hash;
 }
 
 /** 从 pathname 推导当前 slug（去掉语系前缀） */
@@ -74,7 +80,9 @@ export function absolute(slug: string, locale: Locale, siteUrl: string): string 
 
 /** canonical（带结尾斜杠，与默认 ja 行为一致） */
 export function canonicalUrl(slug: string, locale: Locale, siteUrl: string): string {
-  const p = slug === '' ? '/' : localeUrl(slug, locale) + '/';
+  // localeUrl 对首页已返回 '/' 或 '/en/'（自带结尾斜杠），其余返回 '/access' 等
+  const raw = localeUrl(slug, locale);
+  const p = slug === '' ? raw : raw + '/';
   return new URL(p, siteUrl).toString();
 }
 

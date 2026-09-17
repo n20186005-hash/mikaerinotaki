@@ -1,31 +1,27 @@
 ---
 import type { FacilityGroup } from '../data/facilities';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   group: FacilityGroup;
-  /** true のときは項目を折りたたまず全件表示 */
-  detailed?: boolean;
+  locale?: Locale;
 }
-const { group, detailed = false } = Astro.props;
-const items = detailed ? group.items : group.items.slice(0, 3);
+const { group, locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
-
-<article class="card facility">
-  <div class="facility__head">
-    <span class="facility__icon" aria-hidden="true">{group.icon}</span>
-    <h3>{group.title}</h3>
+<section class="facility" id={group.id}>
+  <h2><span class="ico" aria-hidden="true">{group.icon}</span>{t(group.title)}</h2>
+  <p class="lead">{t(group.lead)}</p>
+  <div class="item">
+    {
+      group.items.map((it) => (
+        <div class="fc">
+          <h3>{t(it.label)}</h3>
+          <p>{t(it.body)}</p>
+        </div>
+      ))
+    }
   </div>
-  <p class="facility__lead">{group.lead}</p>
-  <dl class="facility__list">
-    {items.map((i) => (
-      <div class="facility__row">
-        <dt>{i.label}</dt>
-        <dd>{i.body}</dd>
-      </div>
-    ))}
-  </dl>
-  {group.caution && <p class="facility__caution">※ {group.caution}</p>}
-  {!detailed && group.items.length > items.length && (
-    <p class="facility__more"><a href="/facilities">詳しく見る →</a></p>
-  )}
-</article>
+  {group.caution && <p class="caution">{t(group.caution)}</p>}
+</section>

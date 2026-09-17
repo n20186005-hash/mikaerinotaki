@@ -1,11 +1,19 @@
 ---
 import { status } from '../data/status';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
-<aside class="status-card" aria-label="今の季節の状態">
-  <div class="k">今の季節</div>
-  <div class="season">{status.title}</div>
+<aside class="status-card" aria-label={t({ ja: '今の季節の状態', en: 'Current season', 'zh-Hant': '目前季節狀態' })}>
+  <div class="k">{t({ ja: '今の季節', en: 'This season', 'zh-Hant': '目前季節' })}</div>
+  <div class="season">{t(status.title)}</div>
   <div class="tags">
-    {status.highlights.map((h) => <span>{h}</span>)}
+    {status.highlights.map((h) => <span>{t(h)}</span>)}
   </div>
-  <div class="state"><span class="dot"></span>{status.state}</div>
+  <div class="state"><span class="dot"></span>{t(status.state)}</div>
 </aside>

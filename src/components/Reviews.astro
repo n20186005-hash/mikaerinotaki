@@ -1,27 +1,31 @@
 ---
 import { entity } from '../data/entity';
 import { reviews, ratingPercent } from '../data/reviews';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   id?: string;
   /** セクション見出し（省略時は既定文） */
-  title?: string;
+  title?: Localized;
+  locale?: Locale;
 }
-const { id = 'reviews', title = 'みんなの評価' } = Astro.props;
+const { id = 'reviews', title = { ja: 'みんなの評価', en: 'Everyone’s reviews', 'zh-Hant': '大家的好評' }, locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
 ---
 
 <section class="section alt" id={id}>
   <div class="wrap">
     <p class="eyebrow">Google Maps reviews</p>
     <h2 class="section-title">
-      {title}<span class="h2-en">Reviews of {entity.fullNameEn} ({entity.cityEn})</span>
+      {t(title)}<span class="h2-en">Reviews of {entity.fullNameEn} ({entity.cityEn})</span>
     </h2>
 
     <div class="rv">
       <p class="rv__head">
-        {reviews.headline}
+        {t(reviews.headline)}
         <a href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
-          {reviews.viewAllLabel}
+          {t(reviews.viewAllLabel)}
         </a>
       </p>
 
@@ -34,32 +38,32 @@ const { id = 'reviews', title = 'みんなの評価' } = Astro.props;
           <div
             class="stars"
             role="img"
-            aria-label={`${reviews.sourceName}の評価 ${reviews.rating} / ${reviews.maxRating}`}
+            aria-label={`${t(reviews.sourceName)}の評価 ${reviews.rating} / ${reviews.maxRating}`}
           >
             <span class="stars__bg" aria-hidden="true">★★★★★</span>
             <span class="stars__fg" aria-hidden="true" style={`width:${ratingPercent}%`}>★★★★★</span>
           </div>
           <p class="rv__count">
-            <strong>{reviews.ratingCountLabel}</strong> 件の評価 · {reviews.sourceName}
+            <strong>{t(reviews.ratingCountLabel)}</strong> {t({ ja: '件の評価', en: 'reviews', 'zh-Hant': '則評價' })} · {t(reviews.sourceName)}
           </p>
         </div>
       </div>
 
       <p class="rv__sync">
-        {reviews.syncLinePrefix}<a
+        {t(reviews.syncLinePrefix)}<a
           href={reviews.allReviewsUrl}
           target="_blank"
-          rel="noopener noreferrer">{reviews.syncLineLink}</a>
+          rel="noopener noreferrer">{t(reviews.syncLineLink)}</a>
       </p>
 
-      <p class="rv__note">{reviews.sourceNote}</p>
+      <p class="rv__note">{t(reviews.sourceNote)}</p>
 
       <div class="rv__cta">
         <a class="btn btn--outline" href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
-          {reviews.ctaLabel}
+          {t(reviews.ctaLabel)}
         </a>
         <a class="btn btn--sm btn--dark" href={reviews.placeUrl} target="_blank" rel="noopener noreferrer">
-          Google マップで見帰りの滝を開く ↗
+          {t({ ja: 'Google マップで見帰りの滝を開く ↗', en: 'Open Mikaeri No Taki on Google Maps ↗', 'zh-Hant': '在 Google 地圖開啟見歸里之瀧 ↗' })}
         </a>
       </div>
     </div>

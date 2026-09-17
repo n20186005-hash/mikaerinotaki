@@ -1,32 +1,37 @@
 ---
 import { seasonStrategy, climateNote } from '../data/strategy';
+import { L, type Localized } from '../i18n/types';
+import type { Locale } from '../i18n/config';
 
 interface Props {
   id?: string;
+  locale?: Locale;
 }
-const { id = 'strategy' } = Astro.props;
+const { id = 'strategy', locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+const th = (label: { ja: string; en: string; 'zh-Hant': string }) => t(label);
 ---
 
 <section class="section" id={id}>
   <div class="wrap">
     <p class="eyebrow">Seasonal strategy</p>
     <h2 class="section-title">
-      季節ごとの鑑賞戦略<span class="h2-en">Seasonal strategy: climate, water flow &amp; nature</span>
+      {t({ ja: '季節ごとの鑑賞戦略', en: 'Seasonal viewing strategy', 'zh-Hant': '依季節的賞瀑策略' })}<span class="h2-en">Seasonal strategy: climate, water flow &amp; nature</span>
     </h2>
     <p class="section-lead" style="margin-bottom:26px">
-      気象・水量・生きものの三つの視点で、季節ごとの「狙い目」と「注意点」をまとめました。
+      {t({ ja: '気象・水量・生きものの三つの視点で、季節ごとの「狙い目」と「注意点」をまとめました。', en: 'From weather, water and life — the seasonal “best timing” and “cautions”.', 'zh-Hant': '從氣象、水量、生物三個視角，整理各季節的「最佳時機」與「注意事項」。' })}
     </p>
 
     <div class="table-wrap">
       <table class="strategy">
         <thead>
           <tr>
-            <th>季節</th>
-            <th>気象の傾向</th>
-            <th>水量・水の様子</th>
-            <th>自然の見どころ</th>
-            <th>装備の目安</th>
-            <th>注意したいこと</th>
+            <th>{th({ ja: '季節', en: 'Season', 'zh-Hant': '季節' })}</th>
+            <th>{th({ ja: '気象の傾向', en: 'Weather trend', 'zh-Hant': '氣象趨勢' })}</th>
+            <th>{th({ ja: '水量・水の様子', en: 'Water flow', 'zh-Hant': '水量・水態' })}</th>
+            <th>{th({ ja: '自然の見どころ', en: 'Nature', 'zh-Hant': '自然看點' })}</th>
+            <th>{th({ ja: '装備の目安', en: 'Gear', 'zh-Hant': '裝備' })}</th>
+            <th>{th({ ja: '注意したいこと', en: 'Cautions', 'zh-Hant': '注意事項' })}</th>
           </tr>
         </thead>
         <tbody>
@@ -34,14 +39,14 @@ const { id = 'strategy' } = Astro.props;
             seasonStrategy.map((s) => (
               <tr>
                 <th scope="row">
-                  <span class="strategy__season">{s.season}</span>
-                  <span class="strategy__month">{s.month}</span>
+                  <span class="strategy__season">{t(s.season)}</span>
+                  <span class="strategy__month">{t(s.month)}</span>
                 </th>
-                <td>{s.climate}</td>
-                <td>{s.water}</td>
-                <td>{s.nature}</td>
-                <td>{s.gear}</td>
-                <td class="strategy__caution">{s.caution}</td>
+                <td>{t(s.climate)}</td>
+                <td>{t(s.water)}</td>
+                <td>{t(s.nature)}</td>
+                <td>{t(s.gear)}</td>
+                <td class="strategy__caution">{t(s.caution)}</td>
               </tr>
             ))
           }
@@ -50,7 +55,7 @@ const { id = 'strategy' } = Astro.props;
     </div>
 
     <p class="wx__source" style="margin-top:14px">
-      {climateNote}
+      {t(climateNote)}
     </p>
   </div>
 </section>
