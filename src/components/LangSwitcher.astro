@@ -1,0 +1,35 @@
+---
+import { locales, LOCALE_META, hasTranslation, localeUrlSafe, type Locale } from '../i18n/config';
+import { getUi } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+const { locale, slug } = Astro.props;
+const ui = getUi(locale);
+
+// 仅显示「当前语系」与「有该页译文」的其他语系，避免 404
+const options = locales.filter((l) => l === locale || hasTranslation(l, slug));
+---
+<div class="langswitch">
+  <label class="langswitch__label" for="langselect">{ui.langLabel}</label>
+  <select
+    id="langselect"
+    class="langswitch__select"
+    aria-label={ui.langAria}
+    onchange="location.href=this.value"
+  >
+    {
+      options.map((l) => (
+        <option value={localeUrlSafe(slug, l)} selected={l === locale}>
+          {LOCALE_META[l].label}
+        </option>
+      ))
+    }
+  </select>
+</div>
+
+<script>
+  // 纯修饰：原生 onchange 已处理跳转；此处无需额外逻辑
+</script>

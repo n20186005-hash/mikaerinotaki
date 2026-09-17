@@ -1,11 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
+import { stories, kindLabel } from '../data/science';
+import type { Story } from '../data/science';
+
+const kindClass: Record<Story['kind'], string> = {
+  official: 'official',
+  local: 'local',
+  editorial: 'editorial',
+};
 ---
 <Base
-  title="見帰りの滝の歴史と名前の由来｜「見帰り」に込められた物語"
-  description="見帰りの滝の名前の由来と歴史を紹介。「見帰り」に込められた言い伝え、相知の暮らしとの関わり、約4万株のあじさいの景観が生まれた歩みをまとめました。"
+  title="見帰りの滝の歴史・名前の由来・伝説｜石仏とダム、あじさい祭りの歩み"
+  description="見帰りの滝の名前の由来と歴史、右岸の石仏、伊岐佐川ダム、あじさい祭りのはじまり、相知の歴史まで。言い伝えと公的記録を区別して紹介します。"
   active="/history"
+  crumb="歴史と名前の由来"
 >
   <PageHead
     crumb="HISTORY"
@@ -47,6 +56,48 @@ import PageHead from '../components/PageHead.astro';
         <li><span class="yr">近代以降</span><span class="tag-src official">記録</span><h3>名瀑として知られる</h3><p>渓谷の景観が広く知られ、日本の滝百選に数えられるようになりました。</p></li>
         <li><span class="yr">近年</span><span class="tag-src local">地域の取り組み</span><h3>あじさいの植栽が広がる</h3><p>渓谷沿いのあじさいが育ち、約50種・4万株の景観へ。6月のあじさい祭りが恒例となりました。</p></li>
       </ul>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Story archive</p>
+      <h2 class="section-title">
+        物語・伝承・記録<span class="h2-en">Legends, records &amp; local history</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:28px">
+        史実として確認できること、地域に伝わる物語、編集部が一般的な知見として整理した解説。性格の違いを明示して紹介します。
+      </p>
+      <div class="grid grid-2">
+        {
+          stories.map((s) => (
+            <article class="card">
+              <p class="story__meta">
+                <span class="yr">{s.era}</span>
+                <span class={`tag-src ${kindClass[s.kind]}`}>{kindLabel[s.kind]}</span>
+              </p>
+              <h3>{s.title}</h3>
+              <p style="color:rgba(41,49,46,.85)">{s.body}</p>
+              {s.note && <p class="facility__caution">※ {s.note}</p>}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Science</p>
+      <h2 class="section-title">地形・水・生きものから見る滝</h2>
+      <p class="lead">
+        なぜこの場所に落差100mの滝ができたのか。水はどこから来て、どんな生きものが暮らしているのか。
+        科学的な背景を知ると、滝の見え方がもう一段深くなります。
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px">
+        <a class="btn btn--outline" href="/#science">科学で読み解く →</a>
+        <a class="btn btn--outline" href="/facilities">施設・サービス →</a>
+      </div>
     </div>
   </section>
 </Base>

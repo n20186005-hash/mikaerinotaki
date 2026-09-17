@@ -3,11 +3,14 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import FAQ from '../components/FAQ.astro';
 import { faqs } from '../data/faq';
+import { entity } from '../data/entity';
 ---
 <Base
-  title="見帰りの滝 よくある質問｜料金・見頃・駐車場・雨の日・ライトアップ"
-  description="見帰りの滝のよくある質問。入場料、あじさいの見頃、歩きやすさ、駐車場、雨の日、ペット、ライトアップ、所要時間、公共交通をまとめました。"
+  title={`${entity.nameWithVariant} よくある質問｜料金・滞在時間・駐車場・ペット`}
+  description={`${entity.fullName}（見返りの滝）の疑問にまとめて回答。入場は無料？滞在時間の目安？ベビーカーやペットは大丈夫？あじさいの見頃、雨の日、夜のライトアップ、公共交通での行き方まで。`}
   active="/faq"
+  faqs={faqs}
+  crumb="よくある質問"
 >
   <PageHead
     crumb="FAQ"

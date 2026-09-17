@@ -1,0 +1,225 @@
+---
+import { entity } from '../data/entity';
+import {
+  getWeather,
+  weatherApiUrl,
+  describe,
+  buildAdvice,
+  windLabel,
+  dayHint,
+  formatDay,
+} from '../data/weather';
+
+interface Props {
+  id?: string;
+}
+const { id = 'weather' } = Astro.props;
+
+const snap = await getWeather();
+const now = snap?.current ?? null;
+const desc = describe(now?.code ?? null);
+const advice = buildAdvice(snap);
+const daily = (snap?.daily ?? []).slice(0, 7);
+const today = daily[0] ?? null;
+const updated = snap ? new Date(snap.updatedAt) : null;
+const updatedText = updated
+  ? `${updated.getMonth() + 1}/${updated.getDate()} ${String(updated.getHours()).padStart(2, '0')}:${String(updated.getMinutes()).padStart(2, '0')}`
+  : '—';
+const windNow = Math.max(now?.windSpeed ?? 0, now?.gusts ?? 0);
+const jmaWarningUrl = 'https://www.jma.go.jp/bosai/map.html#contents=warning';
+const blocks = [
+  { key: 'wear', icon: '✅', title: '出行穿搭', items: advice.wear },
+  { key: 'plan', icon: '🗺', title: '游玩安排', items: advice.plan },
+  { key: 'gear', icon: '🎒', title: '随身物品', items: advice.gear },
+] as const;
+---
+
+<section class="section alt" id={id}>
+  <div class="wrap">
+    <p class="eyebrow">Weather</p>
+    <h2 class="section-title">
+      今日の天気と週間予報<span class="h2-en">Weather &amp; forecast for {entity.fullNameEn}</span>
+    </h2>
+    <p class="section-lead" style="margin-bottom:24px">
+      滝は渓谷の底にあり、市街地より1〜3℃涼しく、天気が変わりやすい場所です。予報から「今日どう動くか」をそのままお伝えします。
+    </p>
+
+    {
+      snap ? (
+        <div class="wx" data-wx data-endpoint={weatherApiUrl}>
+          <!-- 風險提醒（該当時のみ・最上位） -->
+          <div class="wx__risks" data-wx-risks hidden={advice.risks.length === 0}>
+            <p class="wx__risks-k">⚠️ 风险提醒</p>
+            <ul data-wx-list="risk">
+              {advice.risks.map((r) => <li><span class="wx__i">{r.icon}</span>{r.text}</li>)}
+            </ul>
+            <p class="wx__risks-note">
+              上の注意は予報値から本ページが判定したものです。公式の警報・注意報は
+              <a href={jmaWarningUrl} target="_blank" rel="noopener noreferrer">気象庁の防災情報</a>
+              でもご確認ください（山あいでは天候の変化が早い場所があります）。
+            </p>
+          </div>
+
+          <!-- 基礎天気カード -->
+          <div class="wx__now">
+            <div class="wx__icon" data-wx-icon>{desc.icon}</div>
+            <div class="wx__main">
+              <p class="wx__temp"><span data-wx-temp>{now?.temperature ?? '—'}</span><span class="wx__unit">℃</span></p>
+              <p class="wx__desc" data-wx-desc>{desc.label}</p>
+              <p class="wx__range">
+                今日 <b data-wx-max>{today?.max ?? '—'}</b>° / <b data-wx-min>{today?.min ?? '—'}</b>°
+              </p>
+              <ul class="wx__meta">
+                <li>体感 <b data-wx-feels>{now?.feelsLike ?? '—'}</b>℃</li>
+                <li>降水確率 <b data-wx-pop>{today?.pop ?? '—'}</b>%</li>
+                <li>風 <b data-wx-wind>{windNow.toFixed(1)}</b> m/s（<span data-wx-windlabel>{windLabel(windNow)}</span>）</li>
+                <li>紫外線 <b data-wx-uv>{today?.uv ?? '—'}</b></li>
+                <li>予測地点の標高 <b data-wx-ele>{snap?.elevation ?? '—'}</b> m</li>
+              </ul>
+            </div>
+            <div class={`wx__umbrella wx__umbrella--${advice.umbrella.level}`}>
+              <p class="wx__umbrella-k">傘いる？</p>
+              <p class="wx__umbrella-v" data-wx-umbrella>{advice.umbrella.label}</p>
+              <p class="wx__umbrella-t" data-wx-umbrella-text>{advice.umbrella.text}</p>
+            </div>
+          </div>
+
+          <!-- 三ブロック：該当するものだけ表示 -->
+          <div class="wx__blocks">
+            {blocks.map((b) => (
+              <div class="wx__block" data-wx-block={b.key} hidden={b.items.length === 0}>
+                <p class="wx__block-k"><span aria-hidden="true">{b.icon}</span>{b.title}</p>
+                <ul data-wx-list={b.key}>
+                  {b.items.map((i) => <li><span class="wx__i">{i.icon}</span>{i.text}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div class="notice">現在、天気情報を取得できていません。お出かけ前に最新の天気予報をご確認ください。</div>
+      )
+    }
+
+    {
+      daily.length > 0 && (
+        <div class="wx__days" data-wx-days>
+          {daily.map((d, i) => {
+            const dd = describe(d.code ?? null);
+            const { label, week } = formatDay(d.date, i);
+            const hint = dayHint(d, false);
+            return (
+              <div class="wx__day" data-wx-day={i}>
+                <p class="wx__day-w">{week}</p>
+                <p class="wx__day-d">{label}</p>
+                <p class="wx__day-i" data-wx-day-icon>{dd.icon}</p>
+                <p class="wx__day-t"><span data-wx-day-max>{d.max ?? '—'}</span>° / <span data-wx-day-min>{d.min ?? '—'}</span>°</p>
+                <p class="wx__day-p">☂ <span data-wx-day-pop>{d.pop ?? '—'}</span>%</p>
+                {hint && <p class="wx__day-h" data-wx-day-hint>{hint}</p>}
+              </div>
+            );
+          })}
+        </div>
+      )
+    }
+
+    <p class="wx__source">
+      天気データ：Open-Meteo（各国気象機関の公開データに基づく予報値）／更新：<span data-wx-updated>{updatedText}</span>
+      ・<span class="wx__note">渓谷内の体感は数値より低くなることがあります。増水時は無理をしないでください。</span>
+    </p>
+  </div>
+</section>
+
+<script>
+  import { normalize, buildAdvice, describe, windLabel, dayHint } from '../data/weather';
+
+  const root = document.querySelector<HTMLElement>('[data-wx]');
+  const endpoint = root?.dataset.endpoint;
+
+  if (root && endpoint) {
+    // 条件に合う項目だけを表示（0件のブロックごと隠す）
+    const paintList = (key: string, items: { icon: string; text: string }[]) => {
+      const ul = document.querySelector<HTMLElement>(`[data-wx-list="${key}"]`);
+      if (!ul) return;
+      const block = ul.closest<HTMLElement>('[data-wx-block]') ?? ul.closest<HTMLElement>('[data-wx-risks]');
+      if (block) block.hidden = items.length === 0;
+      if (items.length === 0) return;
+      ul.innerHTML = items.map((i) => `<li><span class="wx__i">${i.icon}</span>${i.text}</li>`).join('');
+    };
+
+    const paint = (raw: any) => {
+      const snap = normalize(raw);
+      const advice = buildAdvice(snap);
+      const now = snap.current;
+      const today = snap.daily[0];
+      const d = describe(now?.code ?? today?.code ?? null);
+      const set = (sel: string, v: unknown) => {
+        const el = document.querySelector<HTMLElement>(sel);
+        if (el && v !== null && v !== undefined) el.textContent = String(v);
+      };
+      set('[data-wx-icon]', d.icon);
+      set('[data-wx-desc]', d.label);
+      set('[data-wx-temp]', now?.temperature ?? '—');
+      set('[data-wx-max]', today?.max ?? '—');
+      set('[data-wx-min]', today?.min ?? '—');
+      set('[data-wx-feels]', now?.feelsLike ?? '—');
+      set('[data-wx-pop]', today?.pop ?? '—');
+      set('[data-wx-uv]', today?.uv ?? '—');
+      set('[data-wx-ele]', snap.elevation ?? '—');
+      const wind = Math.max(now?.windSpeed ?? 0, now?.gusts ?? 0);
+      set('[data-wx-wind]', wind.toFixed(1));
+      set('[data-wx-windlabel]', windLabel(wind));
+      set('[data-wx-umbrella]', advice.umbrella.label);
+      set('[data-wx-umbrella-text]', advice.umbrella.text);
+      const box = document.querySelector<HTMLElement>('.wx__umbrella');
+      if (box) box.className = `wx__umbrella wx__umbrella--${advice.umbrella.level}`;
+
+      paintList('risk', advice.risks);
+      paintList('wear', advice.wear);
+      paintList('plan', advice.plan);
+      paintList('gear', advice.gear);
+
+      snap.daily.slice(0, 7).forEach((day, i: number) => {
+        const card = document.querySelector<HTMLElement>(`[data-wx-day="${i}"]`);
+        if (!card) return;
+        const dd = describe(day.code ?? null);
+        const icon = card.querySelector<HTMLElement>('[data-wx-day-icon]');
+        const hint = card.querySelector<HTMLElement>('[data-wx-day-hint]');
+        if (icon) icon.textContent = dd.icon;
+        const mx = card.querySelector<HTMLElement>('[data-wx-day-max]');
+        const mn = card.querySelector<HTMLElement>('[data-wx-day-min]');
+        const pp = card.querySelector<HTMLElement>('[data-wx-day-pop]');
+        if (mx) mx.textContent = String(day.max ?? '—');
+        if (mn) mn.textContent = String(day.min ?? '—');
+        if (pp) pp.textContent = String(day.pop ?? '—');
+        const text = dayHint(day, false);
+        if (hint) hint.textContent = text;
+      });
+
+      const t = new Date();
+      set(
+        '[data-wx-updated]',
+        `${t.getMonth() + 1}/${t.getDate()} ${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}`
+      );
+    };
+
+    const refresh = async () => {
+      const key = 'mikaeri-weather-cache';
+      const cached = sessionStorage.getItem(key);
+      if (cached) {
+        try {
+          const { at, data } = JSON.parse(cached);
+          if (Date.now() - at < 10 * 60 * 1000) return paint(data);
+        } catch {}
+      }
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) return;
+        const data = await res.json();
+        sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data }));
+        paint(data);
+      } catch {}
+    };
+    refresh();
+  }
+</script>

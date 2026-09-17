@@ -1,0 +1,67 @@
+---
+import { entity } from '../data/entity';
+import { reviews, ratingPercent } from '../data/reviews';
+
+interface Props {
+  id?: string;
+  /** セクション見出し（省略時は既定文） */
+  title?: string;
+}
+const { id = 'reviews', title = 'みんなの評価' } = Astro.props;
+---
+
+<section class="section alt" id={id}>
+  <div class="wrap">
+    <p class="eyebrow">Google Maps reviews</p>
+    <h2 class="section-title">
+      {title}<span class="h2-en">Reviews of {entity.fullNameEn} ({entity.cityEn})</span>
+    </h2>
+
+    <div class="rv">
+      <p class="rv__head">
+        {reviews.headline}
+        <a href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
+          {reviews.viewAllLabel}
+        </a>
+      </p>
+
+      <div class="rv__score">
+        <div class="rv__num">
+          <span class="rv__val">{reviews.rating}</span>
+          <span class="rv__max">/ {reviews.maxRating}</span>
+        </div>
+        <div class="rv__side">
+          <div
+            class="stars"
+            role="img"
+            aria-label={`${reviews.sourceName}の評価 ${reviews.rating} / ${reviews.maxRating}`}
+          >
+            <span class="stars__bg" aria-hidden="true">★★★★★</span>
+            <span class="stars__fg" aria-hidden="true" style={`width:${ratingPercent}%`}>★★★★★</span>
+          </div>
+          <p class="rv__count">
+            <strong>{reviews.ratingCountLabel}</strong> 件の評価 · {reviews.sourceName}
+          </p>
+        </div>
+      </div>
+
+      <p class="rv__sync">
+        {reviews.syncLinePrefix}<a
+          href={reviews.allReviewsUrl}
+          target="_blank"
+          rel="noopener noreferrer">{reviews.syncLineLink}</a>
+      </p>
+
+      <p class="rv__note">{reviews.sourceNote}</p>
+
+      <div class="rv__cta">
+        <a class="btn btn--outline" href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
+          {reviews.ctaLabel}
+        </a>
+        <a class="btn btn--sm btn--dark" href={reviews.placeUrl} target="_blank" rel="noopener noreferrer">
+          Google マップで見帰りの滝を開く ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

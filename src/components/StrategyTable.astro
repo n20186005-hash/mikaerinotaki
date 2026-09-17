@@ -1,0 +1,56 @@
+---
+import { seasonStrategy, climateNote } from '../data/strategy';
+
+interface Props {
+  id?: string;
+}
+const { id = 'strategy' } = Astro.props;
+---
+
+<section class="section" id={id}>
+  <div class="wrap">
+    <p class="eyebrow">Seasonal strategy</p>
+    <h2 class="section-title">
+      季節ごとの鑑賞戦略<span class="h2-en">Seasonal strategy: climate, water flow &amp; nature</span>
+    </h2>
+    <p class="section-lead" style="margin-bottom:26px">
+      気象・水量・生きものの三つの視点で、季節ごとの「狙い目」と「注意点」をまとめました。
+    </p>
+
+    <div class="table-wrap">
+      <table class="strategy">
+        <thead>
+          <tr>
+            <th>季節</th>
+            <th>気象の傾向</th>
+            <th>水量・水の様子</th>
+            <th>自然の見どころ</th>
+            <th>装備の目安</th>
+            <th>注意したいこと</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            seasonStrategy.map((s) => (
+              <tr>
+                <th scope="row">
+                  <span class="strategy__season">{s.season}</span>
+                  <span class="strategy__month">{s.month}</span>
+                </th>
+                <td>{s.climate}</td>
+                <td>{s.water}</td>
+                <td>{s.nature}</td>
+                <td>{s.gear}</td>
+                <td class="strategy__caution">{s.caution}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="wx__source" style="margin-top:14px">
+      {climateNote}
+    </p>
+  </div>
+</section>

@@ -2,42 +2,115 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import LangSwitcher from '../components/LangSwitcher.astro';
+import { entity } from '../data/entity';
+import { site } from '../data/site';
+import type { FaqItem } from '../data/faq';
+import { locales, LOCALE_META, hasTranslation, localeUrl, currentSlug, type Locale } from '../i18n/config';
 
 interface Props {
   title: string;
   description: string;
+  /** 当前语系（默认 ja） */
+  locale?: Locale;
   active?: string;
   preloadHero?: boolean;
+  /** 表示中の FAQ（FAQPage 構造化データを出力） */
+  faqs?: FaqItem[];
+  /** パンくず現在地ラベル */
+  crumb?: string;
+  ogImage?: string;
 }
 
-const { title, description, active, preloadHero = false } = Astro.props;
----
+const {
+  title,
+  description,
+  locale = 'ja',
+  active,
+  preloadHero = false,
+  faqs = [],
+  crumb = '',
+  ogImage = entity.heroImage,
+} = Astro.props;
+
+const slug = currentSlug(Astro.url.pathname);
+const meta = LOCALE_META[locale];
+const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonical = new URL(localeUrl(slug, locale), entity.siteUrl).toString();
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, entity.siteUrl).toString();
+// PWA: 服务工作线程仅在生产构建注册
+const enableSw = import.meta.env.PROD;
+
+// hreflang 备用链接：每个有译文的语系 + x-default(ja)
+const hreflangs = locales
+  .filter((l) => hasTranslation(l, slug))
+  .map((l) => ({ code: LOCALE_META[l].hreflang, url: new URL(localeUrl(slug, l), entity.siteUrl).toString() }));
+hreflangs.push({ code: 'x-default', url: new URL(localeUrl(slug, 'ja'), entity.siteUrl).toString() });
+
 
 <!doctype html>
-<html lang="ja">
+<html lang={meta.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Canonical 规范网址（按语系） -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- hreflang 备用链接 -->
+    {hreflangs.map((h) => <link rel="alternate" hreflang={h.code} href={h.url} />)}
+
+    <!-- Open Graph / Twitter -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${site.name}｜${site.romaji}`} />
+    <meta property="og:locale" content={meta.ogLocale} />
+    {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={LOCALE_META[l].ogLocale} />)}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={`${entity.fullName} in ${entity.city}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Geo / entity meta -->
+    <meta name="geo.region" content="JP-41" />
+    <meta name="geo.placename" content={`${entity.state}${entity.city}`} />
+    <meta name="ICBM" content={`${entity.latitude}, ${entity.longitude}`} />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#183B34" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content={site.name} />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    {preloadHero && <link rel="preload" as="image" href="/images/hero.jpg" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {preloadHero && <link rel="preload" as="image" href={entity.heroImage} />}
+
+    <!-- 構造化データ（評価は JSON-LD に含めない） -->
+    <JsonLd faqs={faqs} crumb={crumb} locale={locale} />
   </head>
-  <body>
-    <Header active={active} />
+  <body data-sw={enableSw ? 'on' : 'off'}>
+    <Header active={active} locale={locale} slug={slug} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
 
     <script>
       // Mobile nav
@@ -73,6 +146,17 @@ const { title, description, active, preloadHero = false } = Astro.props;
       document.querySelectorAll('[data-year]').forEach((el) => {
         el.textContent = String(new Date().getFullYear());
       });
+    </script>
+
+    <script>
+      // PWA: register service worker (production builds only)
+      if (document.body.dataset.sw === 'on' && 'serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {
+            /* no-op */
+          });
+        });
+      }
     </script>
   </body>
 </html>

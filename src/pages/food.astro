@@ -3,11 +3,13 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import FoodCard from '../components/FoodCard.astro';
 import { nearFalls, karatsuFood } from '../data/food';
+import { entity } from '../data/entity';
 ---
 <Base
-  title="見帰りの滝 周辺のランチ・グルメ｜相知の川魚・豆腐と唐津の味"
-  description="見帰りの滝周辺のグルメを案内。滝そばの川魚料理・相知の豆腐から、唐津の呼子イカ・佐賀牛・唐津バーガーまで。予約や営業確認のポイントも。"
+  title={`${entity.nameWithVariant} 周辺のランチ・食事処｜川魚・豆腐・相知の味`}
+  description={`${entity.fullName}（見返りの滝）周辺で食べられるランチをタイプ別に案内。滝そばの川魚料理、相知の豆腐料理、唐津まで足をのばす呼子のイカ・佐賀牛・唐津バーガーまで。営業時間は変わるため事前確認を。`}
   active="/food"
+  crumb="周辺グルメ"
 >
   <PageHead
     crumb="FOOD"
@@ -18,8 +20,14 @@ import { nearFalls, karatsuFood } from '../data/food';
   <section class="section">
     <div class="wrap">
       <p class="eyebrow">Near the falls</p>
-      <h2 class="section-title">滝のすぐそば</h2>
-      <p class="section-lead" style="margin-bottom:28px">歩いたあとに味わう、相知の味。営業日・営業時間・予約は変わることがあるため、お出かけ前の電話確認がおすすめです。</p>
+      <h2 class="section-title">
+        滝のすぐそばのランチ<span class="h2-en">Lunch near {entity.fullNameEn} (by type)</span>
+      </h2>
+      <div class="notice" style="margin-bottom:26px">
+        <strong>方針：</strong>当サイトは非営利の解説サイトです。特定の店舗名は紹介せず、
+        <strong>「どんな種類の店がどの範囲にあるか」</strong>をまとめています。営業日・営業時間・予約は変わることがあるため、お出かけ前の電話確認がおすすめです。
+        <br />{entity.variantNote}
+      </div>
       {nearFalls.map((p) => <FoodCard place={p} />)}
     </div>
   </section>

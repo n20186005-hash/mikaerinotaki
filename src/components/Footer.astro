@@ -1,35 +1,50 @@
 ---
 import { site } from '../data/site';
+import { getUi } from '../i18n/ui';
+import { localeUrlSafe, type Locale } from '../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const ui = getUi(locale);
+const homeHref = localeUrlSafe('', locale);
+const photoHref = localeUrlSafe('photo', locale);
+const sourcesHref = localeUrlSafe('', locale) + '#sources';
 ---
 <footer class="site-footer">
   <div class="wrap">
     <h4>{site.name}</h4>
-    <p class="tagline">{site.tagline}</p>
+    <p class="tagline">{ui.footer.tagline}</p>
     <div class="footcols">
       <div>
-        <p class="en">About</p>
-        <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:36ch">{site.description}</p>
+        <p class="en">{ui.footer.aboutHeading}</p>
+        <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:36ch">{ui.footer.aboutDesc}</p>
       </div>
       <div>
-        <p class="en">Guide</p>
-        <a href="/ajisai">あじさい特集</a>
-        <a href="/seasons">四季の見どころ</a>
-        <a href="/access">アクセス・駐車場</a>
-        <a href="/walk">散策ルート・マップ</a>
+        <p class="en">{ui.footer.guideHeading}</p>
+        {
+          ui.footer.guide.map(([href, label]) => (
+            <a href={localeUrlSafe(href, locale)}>{label}</a>
+          ))
+        }
       </div>
       <div>
-        <p class="en">More</p>
-        <a href="/history">歴史と名前の由来</a>
-        <a href="/food">周辺グルメ</a>
-        <a href="/nearby">モデルコース</a>
-        <a href="/photo">写真スポット</a>
-        <a href="/faq">よくある質問</a>
+        <p class="en">{ui.footer.moreHeading}</p>
+        {
+          ui.footer.more.map(([href, label]) => (
+            <a href={localeUrlSafe(href, locale)}>{label}</a>
+          ))
+        }
       </div>
     </div>
     <hr class="rule" />
     <div class="fine">
       <span>© <span data-year>2026</span> {site.name}ガイド</span>
-      <span>季節・開花・交通規制の情報は変わることがあります。<a href="/photo#credits" style="color:var(--sand)">写真クレジット</a></span>
+      <span>季節・開花・交通規制の情報は変わることがあります。<a href={photoHref + '#credits'} style="color:var(--sand)">{ui.footer.credits}</a> · <a href={sourcesHref} style="color:var(--sand)">{ui.footer.sources}</a></span>
     </div>
+    <p style="font-size:.74rem;color:rgba(255,255,255,.45);margin:14px 0 0">
+      {ui.footer.disclaimer}
+    </p>
   </div>
 </footer>

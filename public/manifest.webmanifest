@@ -1,0 +1,61 @@
+{
+  "id": "/",
+  "name": "見帰りの滝｜Mikaeri No Taki Falls 観光ガイド",
+  "short_name": "見帰りの滝",
+  "description": "佐賀県唐津市相知町の見帰りの滝（Mikaeri No Taki Falls）を案内する旅行ガイド。あじさいの見頃、アクセス、駐車場、散策ルート、ライトアップ、周辺グルメやモデルコースをまとめています。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4F6F3",
+  "theme_color": "#183B34",
+  "categories": ["travel", "navigation", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "アクセス・駐車場",
+      "short_name": "アクセス",
+      "url": "/access",
+      "description": "唐津IC・相知駅からの行き方と駐車場"
+    },
+    {
+      "name": "あじさい特集",
+      "short_name": "あじさい",
+      "url": "/ajisai",
+      "description": "見頃と撮影ポイント、花期の交通情報"
+    },
+    {
+      "name": "散策ルート",
+      "short_name": "ルート",
+      "url": "/walk",
+      "description": "30分・60分・90分の散策モデル"
+    }
+  ]
+}

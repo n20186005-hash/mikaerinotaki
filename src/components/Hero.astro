@@ -1,12 +1,14 @@
 ---
 import { site } from '../data/site';
+import { entity } from '../data/entity';
+import { reviews } from '../data/reviews';
 import SeasonStatus from './SeasonStatus.astro';
 ---
 <section class="hero">
   <img
     class="hero__img"
     src="/images/hero.jpg"
-    alt="あじさいと見帰りの滝。岩肌を白く流れ落ちる水と、青や紫のあじさいの前景。"
+    alt={`${entity.fullName}（${entity.fullNameEn}）— Main view in ${entity.cityEn}, ${entity.countryEn}. 岩肌を白く流れ落ちる水と、青や紫のあじさいの前景。`}
     width="1600"
     height="1068"
   />
@@ -14,13 +16,21 @@ import SeasonStatus from './SeasonStatus.astro';
     <div class="hero__inner">
       <div class="hero__title">
         <p class="hero__badge">日本の滝百選 / 佐賀・唐津・相知</p>
-        <h1>{site.name}</h1>
+        <h1>
+          {entity.fullName}
+          <span class="hero__h1meta">（{entity.state}{entity.city}・{entity.fullNameEn}）</span>
+        </h1>
         <p class="hero__sub">{site.tagline}</p>
         <p class="hero__lead">{site.intro}</p>
         <div class="hero__cta">
           <a class="btn btn--primary" href="#season">今の見どころ</a>
           <a class="btn btn--ghost" href="/access">アクセス・駐車場</a>
         </div>
+        <p class="hero__rating">
+          <a href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">
+            {reviews.sourceName} 評価 <b>{reviews.rating}</b>／{reviews.ratingCountLabel} 件 ↗
+          </a>
+        </p>
       </div>
       <SeasonStatus />
     </div>

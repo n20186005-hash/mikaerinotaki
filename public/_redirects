@@ -1,0 +1,5 @@
+# HTTP → HTTPS の 301 転送（重複収録の解消）
+# Cloudflare 側で「Always Use HTTPS」を有効にしていない場合の保険です。
+http://mikaerinotaki.com/*    https://mikaerinotaki.com/:splat    301
+http://www.mikaerinotaki.com/*    https://mikaerinotaki.com/:splat    301
+https://www.mikaerinotaki.com/*    https://mikaerinotaki.com/:splat    301

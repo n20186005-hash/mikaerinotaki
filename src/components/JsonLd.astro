@@ -1,0 +1,107 @@
+---
+import { entity } from '../data/entity';
+import { site } from '../data/site';
+import type { FaqItem } from '../data/faq';
+import { LOCALE_META, localizeHref, type Locale } from '../i18n/config';
+import { getUi } from '../i18n/ui';
+
+interface Props {
+  /** 表示している FAQ（FAQPage 構造化データに使用。評価は含めない） */
+  faqs?: FaqItem[];
+  /** パンくず現在地ラベル（省略時はホームのみ） */
+  crumb?: string;
+  /** 当前语系 */
+  locale?: Locale;
+}
+const { faqs = [], crumb = '', locale = 'ja' } = Astro.props;
+const ui = getUi(locale);
+
+const canonical = new URL(Astro.url.pathname.replace(/\/+$/, '') || '/', entity.siteUrl).toString();
+const heroImage = `${entity.siteUrl}${entity.heroImage}`;
+
+const descriptionJa = `${entity.fullName}（${entity.fullNameEn}）は${entity.state}${entity.city}${entity.streetAddress}にある日本の滝百選の滝。あじさい・深緑・紅葉・ライトアップなど季節ごとの見どころと、アクセス、駐車場、散策ルートを案内します。`;
+
+/* 1. TouristAttraction（評価データは含めない方針） */
+const attraction = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristAttraction',
+  '@id': `${entity.siteUrl}/#attraction`,
+  name: locale === 'ja' ? entity.fullName : entity.fullNameEn,
+  alternateName: [
+    ...entity.aliases,
+    entity.shortName,
+    entity.fullNameEn,
+    `${entity.city} ${entity.fullName}`,
+    `${entity.cityEn} ${entity.fullNameEn}`,
+  ],
+  description: `${descriptionJa} ${entity.descriptionEn}`,
+  url: entity.siteUrl,
+  image: [heroImage],
+  isAccessibleForFree: entity.isAccessibleForFree,
+  touristType: ['Nature / Waterfall', 'Hydrangea viewing', 'Day trip from Karatsu'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: entity.streetAddress,
+    addressLocality: entity.city,
+    addressRegion: entity.state,
+    postalCode: entity.postalCode,
+    addressCountry: entity.countryCode,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: entity.latitude,
+    longitude: entity.longitude,
+  },
+  hasMap: entity.mapsShareUrl,
+  sameAs: [entity.mapsShareUrl, entity.govtTourismUrl],
+};
+
+/* 2. WebSite */
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${entity.siteUrl}/#website`,
+  name: `${site.name}｜${site.romaji}`,
+  url: entity.siteUrl,
+  inLanguage: locale,
+  publisher: { '@id': `${entity.siteUrl}/#attraction` },
+};
+
+/* 3. BreadcrumbList（crumb 未指定時はホームのみ） */
+const crumbs = [
+  { name: ui.homeCrumb, url: `${entity.siteUrl}/` },
+  ...(crumb ? [{ name: crumb, url: canonical }] : []),
+];
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: c.url,
+  })),
+};
+
+/* 4. FAQPage（表示中の FAQ のみ。リンクは语系パスへ書き換え） */
+const faqPage = faqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: localizeHref(f.a, locale).replace(/<[^>]+>/g, ''),
+        },
+      })),
+    }
+  : null;
+
+const graphs = [attraction, website, breadcrumb, ...(faqPage ? [faqPage] : [])];
+---
+
+{graphs.map((g) => (
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(g)} />
+))}

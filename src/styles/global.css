@@ -72,6 +72,18 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.4; 
 .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--ajisai); display: inline-block; }
 .section { padding: clamp(56px, 9vw, 112px) 0; }
 .section-title { font-size: clamp(1.6rem, 3.6vw, 2.5rem); margin: 0 0 .5em; }
+/* H2 内の英語サブライン（エンティティバインディング用） */
+.h2-en {
+  display: block;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ajisai);
+  font-weight: 500;
+  margin-top: 10px;
+}
+.dark .h2-en { color: var(--sand); }
 .section-lead { max-width: 640px; color: rgba(41,49,46,.82); font-size: 1.02rem; }
 .alt { background: var(--paper); }
 .dark { background: var(--forest); color: var(--mist); }
@@ -136,6 +148,19 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.4; 
 .hero__sub { font-family: var(--serif); font-size: clamp(1.05rem, 2.4vw, 1.5rem); color: #f3f0e8; margin: 0 0 6px; }
 .hero__lead { color: rgba(255,255,255,.85); max-width: 460px; font-size: .98rem; }
 .hero__cta { display: flex; gap: 14px; margin-top: 26px; flex-wrap: wrap; }
+.hero__h1meta {
+  display: block;
+  font-size: .26em;
+  letter-spacing: .18em;
+  font-weight: 400;
+  color: rgba(255,255,255,.85);
+  margin-top: .45em;
+  text-shadow: none;
+}
+.hero__rating { margin-top: 18px; font-size: .84rem; }
+.hero__rating a { color: var(--sand); text-decoration: none; }
+.hero__rating a:hover { text-decoration: underline; }
+.hero__rating b { font-family: var(--mono); font-size: 1.05em; }
 
 /* status card */
 .status-card {
@@ -350,6 +375,177 @@ td .en { font-family: var(--mono); }
 .site-footer .rule { border: 0; border-top: 1px solid rgba(255,255,255,.14); margin: 36px 0 18px; }
 .site-footer .fine { font-size: .78rem; color: rgba(255,255,255,.55); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 @media (max-width: 720px){ .footcols { grid-template-columns: 1fr 1fr; } }
+
+/* ============================================================
+   Entity chain（見帰りの滝 → 唐津市 → 佐賀県 → 日本）
+   ============================================================ */
+.chain {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-top: 22px; font-family: var(--mono); font-size: .86rem;
+  letter-spacing: .06em; color: var(--forest);
+}
+.chain span { background: rgba(114,138,168,.12); border-radius: 999px; padding: 6px 14px; }
+.chain .chain__sep { background: none; padding: 0; color: var(--ajisai); }
+
+/* ============================================================
+   Reviews（Google マップ評価）
+   ============================================================ */
+.rv { background: var(--paper); border: 1px solid var(--line-soft); border-radius: 18px; padding: clamp(22px, 4vw, 36px); box-shadow: var(--shadow); }
+.rv__head { font-size: .95rem; color: rgba(41,49,46,.85); margin: 0 0 18px; }
+.rv__head a { color: var(--ajisai); font-weight: 600; text-decoration: none; }
+.rv__head a:hover { text-decoration: underline; }
+.rv__score { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.rv__num { display: flex; align-items: baseline; gap: 6px; }
+.rv__val { font-family: var(--mono); font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 600; color: var(--forest); line-height: 1; }
+.rv__max { font-family: var(--mono); font-size: .9rem; color: rgba(41,49,46,.55); }
+.rv__count { margin: 8px 0 0; font-size: .9rem; color: rgba(41,49,46,.8); }
+.rv__count strong { font-family: var(--mono); color: var(--forest); font-size: 1.05em; }
+.stars { position: relative; display: inline-block; font-size: 1.5rem; line-height: 1; letter-spacing: 2px; color: rgba(41,49,46,.18); white-space: nowrap; }
+.stars__fg { position: absolute; inset: 0 auto 0 0; overflow: hidden; color: #f4b400; white-space: nowrap; }
+.rv__sync { margin: 20px 0 0; font-size: .82rem; color: rgba(41,49,46,.72); }
+.rv__sync a { color: var(--ajisai); text-decoration: none; }
+.rv__sync a:hover { text-decoration: underline; }
+.rv__note { margin: 8px 0 0; font-size: .8rem; color: rgba(41,49,46,.55); }
+.rv__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+
+/* ============================================================
+   Weather（現在天気 + 週間予報）
+   ============================================================ */
+.wx { background: var(--paper); border: 1px solid var(--line-soft); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+.wx__now { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(18px, 3vw, 32px); padding: clamp(22px, 4vw, 34px); border-bottom: 1px solid var(--line-soft); }
+.wx__icon { font-size: clamp(2.6rem, 6vw, 3.4rem); line-height: 1; }
+.wx__main { flex: 1; }
+.wx__temp { margin: 0; font-family: var(--mono); font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 600; color: var(--forest); line-height: 1; }
+.wx__unit { font-size: .5em; margin-left: 4px; }
+.wx__desc { margin: 8px 0 12px; font-family: var(--serif); font-size: 1.15rem; color: var(--forest); }
+.wx__range { margin: 8px 0 12px; font-family: var(--mono); font-size: .88rem; color: rgba(41,49,46,.8); }
+.wx__range b { color: var(--forest); }
+.wx__meta { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; font-size: .86rem; color: rgba(41,49,46,.78); }
+.wx__meta b { font-family: var(--mono); color: var(--forest); }
+
+/* 风险提醒（該当時のみ） */
+.wx__risks { background: rgba(139,118,156,.14); border-left: 4px solid var(--murasaki); padding: 18px clamp(20px, 3vw, 30px); }
+.wx__risks-k { margin: 0 0 10px; font-weight: 700; color: #a13b52; font-size: .92rem; letter-spacing: .04em; }
+.wx__risks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .9rem; color: rgba(41,49,46,.9); }
+.wx__risks-note { margin: 12px 0 0; font-size: .76rem; color: rgba(41,49,46,.62); }
+.wx__risks-note a { color: var(--ajisai); }
+
+/* 三ブロック：出行穿搭 / 游玩安排 / 随身物品 */
+.wx__blocks { display: grid; grid-template-columns: repeat(3, 1fr); }
+.wx__block { padding: 22px clamp(18px, 3vw, 26px); border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
+.wx__block:first-child { border-left: 0; }
+.wx__block-k { margin: 0; font-weight: 600; color: var(--forest); font-size: .95rem; }
+.wx__block-k span { margin-right: 8px; }
+.wx__block ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 9px; font-size: .88rem; color: rgba(41,49,46,.85); }
+.wx__i { margin-right: 7px; }
+@media (max-width: 860px){
+  .wx__blocks { grid-template-columns: 1fr; }
+  .wx__block { border-left: 0; }
+}
+
+.wx__umbrella { flex: 1 1 220px; min-width: 210px; padding: 16px 20px; border-radius: 14px; background: rgba(114,138,168,.08); border-left: 3px solid var(--ajisai); }
+.wx__umbrella--need { background: rgba(139,118,156,.14); border-left-color: var(--murasaki); }
+.wx__umbrella--maybe { background: rgba(114,138,168,.14); }
+.wx__umbrella-k { margin: 0; font-family: var(--mono); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ajisai); }
+.wx__umbrella-v { margin: 4px 0 8px; font-family: var(--serif); font-size: 1.6rem; color: var(--forest); }
+.wx__umbrella-t { margin: 0 0 14px; font-size: .92rem; color: rgba(41,49,46,.85); }
+.wx__pack { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .88rem; }
+.wx__pack li { padding-left: 26px; position: relative; color: rgba(41,49,46,.8); }
+.wx__pack li::before { content: "・"; position: absolute; left: 10px; color: var(--ajisai); font-weight: 700; }
+
+.wx__days { display: grid; grid-template-columns: repeat(7, minmax(84px, 1fr)); gap: 12px; margin-top: 20px; overflow-x: auto; padding-bottom: 6px; }
+.wx__day { background: var(--paper); border: 1px solid var(--line-soft); border-radius: 14px; padding: 14px 10px; text-align: center; }
+.wx__day-w { margin: 0; font-family: var(--serif); font-size: .95rem; color: var(--forest); }
+.wx__day-d { margin: 2px 0 8px; font-family: var(--mono); font-size: .7rem; color: rgba(41,49,46,.55); }
+.wx__day-i { margin: 0 0 6px; font-size: 1.5rem; line-height: 1.2; }
+.wx__day-t { margin: 0; font-family: var(--mono); font-size: .82rem; color: var(--forest); }
+.wx__day-p { margin: 4px 0 0; font-size: .74rem; color: var(--ajisai); }
+.wx__day-h { margin: 6px 0 0; font-size: .7rem; line-height: 1.4; color: var(--murasaki); }
+@media (max-width: 860px){ .wx__days { grid-template-columns: repeat(7, 76px); } .wx__now { flex-direction: column; align-items: flex-start; } }
+
+.wx__source { margin: 16px 0 0; font-size: .78rem; color: rgba(41,49,46,.6); }
+.wx__note { display: block; margin-top: 4px; }
+
+/* ============================================================
+   Strategy table / plans / facilities / science
+   ============================================================ */
+table.strategy { min-width: 860px; }
+table.strategy th[scope="row"] { white-space: nowrap; background: rgba(24,59,52,.05); }
+.strategy__season { display: block; font-family: var(--serif); font-size: 1.05rem; color: var(--forest); }
+.strategy__month { display: block; font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; color: var(--ajisai); }
+.strategy__caution { color: var(--murasaki); }
+
+.plan__head { display: flex; align-items: center; gap: 14px; }
+.plan__icon { font-size: 1.6rem; }
+.plan__audience { margin: 2px 0 0; font-size: .84rem; color: rgba(41,49,46,.7); }
+.plan__meta { margin: 14px 0 10px; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; color: var(--ajisai); }
+.plan__steps { margin: 0 0 14px; padding-left: 22px; display: grid; gap: 8px; font-size: .9rem; color: rgba(41,49,46,.85); }
+.plan__tips { font-size: .86rem; }
+
+.facility__head { display: flex; align-items: center; gap: 12px; }
+.facility__head h3 { margin: 0; font-size: 1.18rem; }
+.facility__icon { font-size: 1.5rem; }
+.facility__lead { margin: 10px 0 14px; font-size: .9rem; color: rgba(41,49,46,.8); }
+.facility__list { margin: 0; display: grid; gap: 10px; }
+.facility__row { display: grid; grid-template-columns: 8.5em 1fr; gap: 12px; font-size: .88rem; }
+.facility__row dt { font-weight: 600; color: var(--forest); }
+.facility__row dd { margin: 0; color: rgba(41,49,46,.82); }
+.facility__caution { margin: 14px 0 0; font-size: .78rem; color: rgba(41,49,46,.6); }
+.facility__more { margin: 14px 0 0; font-size: .84rem; }
+.facility__more a { color: var(--ajisai); }
+@media (max-width: 560px){ .facility__row { grid-template-columns: 1fr; gap: 2px; } }
+
+.science__lead { margin: 6px 0 14px; font-size: .9rem; color: rgba(41,49,46,.8); }
+.duty { display: flex; gap: 14px; align-items: flex-start; background: var(--paper); border: 1px solid var(--line-soft); border-radius: 14px; padding: 18px 20px; }
+.duty__icon { font-size: 1.4rem; flex: none; }
+.duty h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.duty p { margin: 0; font-size: .88rem; color: rgba(41,49,46,.82); }
+
+.story__meta { margin: 0 0 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tag-src.editorial { background: rgba(207,195,174,.35); color: #6b5f45; }
+
+/* ============================================================
+   Location（地図埋め込み + 位置情報）
+   ============================================================ */
+.loc { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(22px, 4vw, 40px); align-items: start; }
+.loc__map { border-radius: 18px; overflow: hidden; border: 1px solid var(--line-soft); box-shadow: var(--shadow); background: var(--paper); }
+.loc__map iframe { display: block; width: 100%; border: 0; aspect-ratio: 16 / 10; height: auto; min-height: 300px; }
+.loc__dl { margin: 0 0 20px; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: .92rem; }
+.loc__dl dt { font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ajisai); padding-top: 4px; }
+.loc__dl dd { margin: 0; color: rgba(41,49,46,.85); }
+.loc__links { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 860px){ .loc { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   Sources（資料来源 / E-E-A-T）
+   ============================================================ */
+.src-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: src; }
+.src-item {
+  counter-increment: src;
+  display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+  background: var(--paper); border: 1px solid var(--line-soft); border-radius: 14px; padding: 18px 22px;
+}
+.src-kind {
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
+  background: rgba(114,138,168,.14); color: var(--forest);
+  border-radius: 999px; padding: 6px 12px; white-space: nowrap; margin-top: 2px;
+}
+.src-name { margin: 0 0 4px; font-weight: 600; color: var(--forest); }
+.src-name a { color: var(--forest); text-decoration: none; border-bottom: 1px solid rgba(114,138,168,.4); }
+.src-name a:hover { border-bottom-color: var(--ajisai); }
+.src-usage { margin: 0; font-size: .86rem; color: rgba(41,49,46,.72); }
+.src-sync { margin: 6px 0 0; font-size: .8rem; color: var(--murasaki); }
+.src-note { margin: 4px 0 0; font-size: .78rem; color: rgba(41,49,46,.55); }
+.src-note a { color: var(--ajisai); }
+@media (max-width: 620px){ .src-item { grid-template-columns: 1fr; } .src-kind { justify-self: start; } }
+
+/* quick nav（ワンタップで地図・ナビを開く：モバイル最適化） */
+.quicknav { display: flex; flex-wrap: wrap; gap: 10px; }
+.quicknav .btn { flex: 1 1 auto; justify-content: center; text-align: center; }
+@media (max-width: 620px){
+  .quicknav { display: grid; grid-template-columns: 1fr 1fr; }
+  .quicknav .btn { width: 100%; padding: 12px 14px; font-size: .85rem; }
+}
 
 /* utilities */
 .mt-0{margin-top:0}.mb-0{margin-bottom:0}

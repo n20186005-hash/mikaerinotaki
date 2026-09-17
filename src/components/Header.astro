@@ -1,23 +1,31 @@
 ---
 import Logo from './Logo.astro';
-import { nav, site } from '../data/site';
+import LangSwitcher from './LangSwitcher.astro';
+import { site } from '../data/site';
+import { getNav } from '../i18n/ui';
+import { localeUrlSafe, type Locale } from '../i18n/config';
 
 interface Props {
   active?: string;
+  locale?: Locale;
+  slug?: string;
 }
-const { active } = Astro.props;
+const { active, locale = 'ja', slug = '' } = Astro.props;
+const navItems = getNav(locale);
+const brandHref = localeUrlSafe('', locale);
 ---
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" aria-label={`${site.name} ホーム`}>
+    <a class="brand" href={brandHref} aria-label={`${site.name} ホーム`}>
       <Logo />
       <span><b>{site.name}</b><small>{site.romaji}</small></span>
     </a>
+    <LangSwitcher locale={locale} slug={slug} />
     <button class="nav-toggle" aria-label="メニュー" aria-controls="nav" aria-expanded="false"><span></span></button>
     <nav class="nav" id="nav">
       {
-        nav.map((item) => (
-          <a href={item.href} aria-current={active === item.href ? 'page' : undefined}>
+        navItems.map((item) => (
+          <a href={localeUrlSafe(item.href, locale)} aria-current={active === item.href ? 'page' : undefined}>
             {item.label}
           </a>
         ))

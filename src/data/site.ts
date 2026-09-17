@@ -20,6 +20,7 @@ export const nav: NavItem[] = [
   { href: '/walk', label: '散策ルート' },
   { href: '/history', label: '歴史' },
   { href: '/food', label: 'グルメ' },
+  { href: '/facilities', label: '施設' },
   { href: '/nearby', label: '周辺コース' },
   { href: '/photo', label: '写真' },
   { href: '/faq', label: 'FAQ' },

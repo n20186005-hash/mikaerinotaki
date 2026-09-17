@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="見帰りの滝 Mikaeri Falls">
+  <rect width="512" height="512" rx="96" fill="#183B34" />
+  <!-- 滝：二筋の水流 -->
+  <path d="M186 92h54v300l-27 26-27-26z" fill="#F4F6F3" opacity="0.95" />
+  <path d="M282 92h44v330l-22 22-22-22z" fill="#CFC3AE" opacity="0.9" />
+  <!-- 水しぶき -->
+  <ellipse cx="254" cy="418" rx="140" ry="30" fill="#728AA8" opacity="0.55" />
+  <ellipse cx="254" cy="432" rx="96" ry="18" fill="#F4F6F3" opacity="0.35" />
+  <!-- あじさい（アクセント） -->
+  <circle cx="118" cy="392" r="34" fill="#8B769C" opacity="0.9" />
+  <circle cx="402" cy="404" r="26" fill="#728AA8" opacity="0.9" />
+</svg>

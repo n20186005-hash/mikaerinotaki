@@ -1,17 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
+import { entity } from '../data/entity';
 ---
 <Base
-  title="見帰りの滝のあじさい｜見頃・約4万株・雨の日・駐車場ガイド"
-  description="見帰りの滝のあじさいを詳しく案内。約50種4万株の見頃、雨の日の楽しみ方、花期の駐車場・交通規制・シャトル、撮影スポットまで。"
+  title={`${entity.nameWithVariant} あじさい｜見頃・約4万株・駐車場・シャトル`}
+  description={`${entity.fullName}（見返りの滝）のあじさい完全ガイド。例年6月が見頃、約50種・4万株、雨の日の楽しみ方、花期の駐車場・交通規制・シャトル、撮影スポットと開花状況の確認方法まで。`}
   active="/ajisai"
+  crumb="あじさい"
 >
   <PageHead
     crumb="AJISAI"
     title="あじさいと滝"
     lead="約50種・4万株。青や紫の花越しに眺める滝は、見帰りの滝いちばんの見どころです。見頃、雨の日、花期の駐車場までまとめました。"
   />
+
+  <section class="section" style="padding-top:clamp(28px,4vw,44px)">
+    <div class="wrap">
+      <div class="quicknav">
+        <a class="btn btn--dark" href={entity.mapsShareUrl} target="_blank" rel="noopener noreferrer">📍 見帰りの滝を地図で開く ↗</a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('見帰りの滝 蛍橋駐車場')}`} target="_blank" rel="noopener noreferrer">🅿️ 花期の駐車場へナビ</a>
+        <a class="btn btn--outline" href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">🌸 公式の開花・祭り情報 ↗</a>
+      </div>
+      <div class="notice" style="margin-top:18px">
+        <strong>名称について：</strong>{entity.variantNote}
+      </div>
+    </div>
+  </section>
 
   <section class="section">
     <div class="wrap">

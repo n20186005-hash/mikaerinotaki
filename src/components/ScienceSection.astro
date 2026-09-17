@@ -1,0 +1,71 @@
+---
+import { scienceTopics, visitorDuties } from '../data/science';
+import { entity } from '../data/entity';
+
+interface Props {
+  id?: string;
+  /** トピックを全文表示するか（ページ用） */
+  detailed?: boolean;
+}
+const { id = 'science', detailed = false } = Astro.props;
+---
+
+<section class="section alt" id={id}>
+  <div class="wrap">
+    <p class="eyebrow">Science &amp; nature</p>
+    <h2 class="section-title">
+      見帰りの滝を科学で読み解く<span class="h2-en">Geology, hydrology &amp; ecology of {entity.fullNameEn}</span>
+    </h2>
+    <p class="section-lead" style="margin-bottom:30px">
+      この滝がどうしてここにあり、どんな水と生きものに支えられているのか。知ってから歩くと、景色の見え方が変わります。
+    </p>
+
+    <div class="grid grid-2">
+      {
+        scienceTopics.map((t) => (
+          <article class="card science">
+            <h3>{t.icon} {t.title}</h3>
+            <p class="science__lead">{t.lead}</p>
+            <dl class="facility__list">
+              {(detailed ? t.points : t.points.slice(0, 3)).map((p) => (
+                <div class="facility__row">
+                  <dt>{p.k}</dt>
+                  <dd>{p.v}</dd>
+                </div>
+              ))}
+            </dl>
+            {t.note && <p class="facility__caution">※ {t.note}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" id="responsibility">
+  <div class="wrap">
+    <p class="eyebrow">Visitor responsibility</p>
+    <h2 class="section-title">
+      来訪者の責任（守ってほしいこと）<span class="h2-en">Leave no trace, keep the gorge safe</span>
+    </h2>
+    <p class="section-lead" style="margin-bottom:28px">
+      渓谷は人の手で守られている景観です。次の人が同じ景色に出会えるよう、8つの約束を守りましょう。
+    </p>
+    <div class="grid grid-2">
+      {
+        visitorDuties.map((d) => (
+          <div class="duty">
+            <span class="duty__icon" aria-hidden="true">{d.icon}</span>
+            <div>
+              <h3>{d.title}</h3>
+              <p>{d.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    <div class="notice" style="margin-top:26px">
+      <strong>補足：</strong>当サイトは非営利の解説サイトです。特定の店舗・施設の紹介は行わず、種別と一般的な傾向のみをまとめています。最新の規制・営業状況は、必ず現地の案内・公式情報でご確認ください。
+    </div>
+  </div>
+</section>

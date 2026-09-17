@@ -1,0 +1,58 @@
+---
+import { entity } from '../data/entity';
+import { reviews } from '../data/reviews';
+import { sources } from '../data/sources';
+
+interface Props {
+  id?: string;
+}
+const { id = 'sources' } = Astro.props;
+---
+
+<section class="section" id={id}>
+  <div class="wrap">
+    <p class="eyebrow">Sources</p>
+    <h2 class="section-title">
+      情報源とクレジット<span class="h2-en">Sources &amp; references for {entity.fullNameEn}</span>
+    </h2>
+    <p class="section-lead" style="margin-bottom:26px">
+      掲載内容は以下の公的機関・地域観光団体・百科事典の情報をもとに編集しています。季節・開花・交通規制は変更される場合があるため、お出かけ前に一次情報もご確認ください。
+    </p>
+
+    <ol class="src-list">
+      {
+        sources.map((s) => (
+          <li class="src-item">
+            <div class="src-kind">{s.kind}</div>
+            <div class="src-body">
+              <p class="src-name">
+                <a href={s.url} target="_blank" rel="noopener noreferrer">{s.name}</a>
+              </p>
+              <p class="src-usage">{s.usage}</p>
+              {s.syncedAt && <p class="src-sync">{reviews.sourcesEntryLabel} · 同步时间 {s.syncedAt}</p>}
+              {s.note && <p class="src-note">{s.note}</p>}
+              {s.syncedAt && (
+                <p class="src-note">
+                  <a href={s.url} target="_blank" rel="noopener noreferrer">{reviews.syncLineLink}</a>
+                </p>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="notice" style="margin-top:26px">
+      <strong>ご注意：</strong>本サイトは{entity.fullName}（{entity.fullNameEn}）を紹介する独立した旅行ガイドです。{entity.city}・{entity.state}の公式サイトではありません。評価と評価件数は
+      {reviews.sourceName}のユーザー評価を引用したもので、最新の数値は
+      <a href={reviews.allReviewsUrl} target="_blank" rel="noopener noreferrer">Google マップ</a>
+      にてご確認ください。
+    </div>
+
+    <p style="margin-top:22px">
+      For official updates and regional tourism information, visit
+      <a href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">
+        {entity.countryEn} / {entity.stateEn} Official Tourism Portal </a>.
+    </p>
+  </div>
+</section>

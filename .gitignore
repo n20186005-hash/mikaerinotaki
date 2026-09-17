@@ -1,12 +1,46 @@
+# 依赖
 node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Astro 构建产物与缓存
 dist/
-.env
-*.local
-.DS_Store
-*.log
-apps/web/src/routeTree.gen.ts
-releases/
+.astro/
+.output/
 
-
-.astro
+# Cloudflare / Wrangler（手动部署，本地产物不上传）
 .wrangler/
+.mf/
+wrangler-deploy.log
+.dev.vars
+.dev.vars.*
+!.wrangler/config/
+
+# 环境变量与密钥
+.env
+.env.*
+!.env.example
+*.local
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+*.swo
+
+# 日志
+*.log
+logs/
+
+# 本地临时与备份
+*.tmp
+*.bak
+*.orig
+
+# 其他包管理器锁文件（本项目使用 pnpm-lock.yaml）
+package-lock.json
+yarn.lock
