@@ -1,6 +1,7 @@
 ---
 import type { FaqItem } from '../data/faq';
 import { localizeHref, type Locale } from '../i18n/config';
+import { L } from '../i18n/types';
 
 interface Props {
   items: FaqItem[];
@@ -12,8 +13,8 @@ const { items, locale = 'ja' } = Astro.props;
   {
     items.map((item, i) => (
       <details open={i === 0}>
-        <summary>{item.q}</summary>
-        <div class="a" set:html={localizeHref(item.a, locale)} />
+        <summary>{L(item.q, locale)}</summary>
+        <div class="a" set:html={localizeHref(L(item.a, locale), locale)} />
       </details>
     ))
   }

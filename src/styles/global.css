@@ -100,7 +100,16 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.4; 
   backdrop-filter: saturate(140%) blur(12px);
   border-bottom: 1px solid var(--line-soft);
 }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 14px; height: 66px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.langswitch { display: flex; align-items: center; gap: 6px; }
+.langswitch__label { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ajisai); }
+.langswitch__select {
+  font-family: var(--sans); font-size: .82rem; color: var(--forest);
+  background: var(--paper); border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 8px; cursor: pointer; max-width: 130px;
+}
+.langswitch__select:focus-visible { outline: 2px solid var(--ajisai); outline-offset: 1px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand .mark { flex: none; }
 .brand b { font-family: var(--serif); font-weight: 600; font-size: 1.18rem; color: var(--forest); letter-spacing: .06em; display: block; line-height: 1.1; }

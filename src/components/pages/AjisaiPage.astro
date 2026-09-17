@@ -1,0 +1,135 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { entity, ajisaiFestival } from '../../data/entity';
+import { L, type Localized } from '../../i18n/types';
+import { common } from '../../i18n/ui';
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const c = common[locale];
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: `${entity.nameWithVariant} あじさい｜見頃・約4万株・駐車場・シャトル`,
+    description: `${entity.fullName}（見返りの滝）のあじさい完全ガイド。例年6月が見頃、約50種・4万株、雨の日の楽しみ方、花期の駐車場・交通規制・シャトル、撮影スポットと開花状況の確認方法まで。`,
+    crumb: 'あじさい',
+    headTitle: 'あじさいと滝',
+    headLead: '約50種・4万株。青や紫の花越しに眺める滝は、見帰りの滝いちばんの見どころです。見頃、雨の日、花期の駐車場までまとめました。',
+  },
+  en: {
+    title: `${entity.fullNameEn} Hydrangeas | Peak, ~40,000 Plants, Parking & Shuttle`,
+    description: `A complete hydrangea guide to ${entity.fullNameEn} (Mikaeri No Taki Falls). Peak usually in June with ~50 varieties and 40,000 plants, rainy-day tips, festival parking / traffic control / shuttle, photo spots and how to check bloom status.`,
+    crumb: 'Hydrangea',
+    headTitle: 'Hydrangeas & the falls',
+    headLead: 'About 50 varieties and 40,000 plants. The falls viewed through blue and purple blooms is the highlight of Mikaeri No Taki. We cover the peak, rainy days and festival parking.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 繡球花｜花期・約4萬株・停車・接駁`,
+    description: `${entity.fullName}（見歸里之瀧）繡球花完整指南。通常6月最美，約50種・4萬株，雨天玩法、花期停車與交通管制、接駁巴士、攝影點與花況查詢方式。`,
+    crumb: '繡球花',
+    headTitle: '繡球花與瀑布',
+    headLead: '約50種・4萬株。透過藍紫色花朵眺望瀑布，是見歸里之瀧最迷人的看點。這裡整理花期、雨天與花期停車資訊。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/ajisai" crumb={m.crumb}>
+  <PageHead crumb="AJISAI" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section" style="padding-top:clamp(28px,4vw,44px)">
+    <div class="wrap">
+      <div class="quicknav">
+        <a class="btn btn--dark" href={entity.mapsShareUrl} target="_blank" rel="noopener noreferrer">📍 {entity.fullNameEn} ↗</a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('見帰りの滝 蛍橋駐車場')}`} target="_blank" rel="noopener noreferrer">🅿️ {c.parkingNav}</a>
+        <a class="btn btn--outline" href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">{c.officialInfo}</a>
+      </div>
+      <div class="notice" style="margin-top:18px">
+        <strong>{t({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' })}</strong>{entity.variantNote}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="split wide">
+        <div class="split__media"><img src="/images/hero.jpg" alt={t({ ja: 'あじさいの前景と、白く流れ落ちる見帰りの滝', en: 'Hydrangeas in front of the white cascade of Mikaeri No Taki', 'zh-Hant': '前景繡球花與白色傾瀉的見歸里之瀧' })} width="1600" height="1068" /></div>
+        <div>
+          <p class="eyebrow">Best season</p>
+          <h2 class="section-title">{t({ ja: '見頃はいつ？', en: 'When is the peak?', 'zh-Hant': '什麼時候最美？' })}</h2>
+          <p class="lead">{t({ ja: '例年6月が見頃です。梅雨の時期と重なり、しっとりとした渓谷にあじさいが映えます。開花は天候により前後するため、訪問前に最新の開花状況をご確認ください。', en: 'Usually peak in June, coinciding with the rainy season — the blooms glow in the moist gorge. Flowering shifts with weather, so check the latest bloom status before visiting.', 'zh-Hant': '通常6月最美，正值梅雨季，濕潤溪谷襯得繡球花格外動人。開花會因天候提前或延後，出發前請確認最新花況。' })}</p>
+          <div class="facts" style="margin-top:24px">
+            <div class="cell"><div class="num">6<span style="font-size:1rem">{t({ ja: '月', en: '', 'zh-Hant': '月' })}</span></div><div class="lbl">{t({ ja: '例年の見頃', en: 'Typical peak', 'zh-Hant': '往年花期' })}</div></div>
+            <div class="cell"><div class="num">50<span style="font-size:1rem">{t({ ja: '種', en: '', 'zh-Hant': '種' })}</span></div><div class="lbl">{t({ ja: 'あじさいの品種', en: 'Varieties', 'zh-Hant': '繡球花品種' })}</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2027 あじさい祭り 日程・シャトル -->
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Hydrangea Festival</p>
+      <h2 class="section-title">{t({ ja: `あじさい祭り ${ajisaiFestival.nextYear} の日程`, en: `Hydrangea Festival ${ajisaiFestival.nextYear} dates`, 'zh-Hant': `繡球花祭 ${ajisaiFestival.nextYear} 日程` })}</h2>
+      <div class="notice" style="margin-top:18px">
+        <strong>{t({ ja: `${ajisaiFestival.nextYear}年の日程：`, en: `${ajisaiFestival.nextYear} dates: `, 'zh-Hant': `${ajisaiFestival.nextYear}年日程：` })}</strong>{t(ajisaiFestival.nextYearStatus)}
+      </div>
+      <p class="section-lead" style="margin-top:18px">{t({ ja: `第${ajisaiFestival.editionRecent}回（${ajisaiFestival.recentYear}年実績）：${ajisaiFestival.recentStart} 〜 ${ajisaiFestival.recentEnd}。${ajisaiFestival.species}種・約${ajisaiFestival.plants.toLocaleString()}株が渓谷を彩ります。`, en: `The ${ajisaiFestival.editionRecent}th edition (${ajisaiFestival.recentYear}: ${ajisaiFestival.recentStart} – ${ajisaiFestival.recentEnd}). About ${ajisaiFestival.species} varieties and ${ajisaiFestival.plants.toLocaleString()} plants colour the gorge.`, 'zh-Hant': `第${ajisaiFestival.editionRecent}回（${ajisaiFestival.recentYear}年實績）：${ajisaiFestival.recentStart} 〜 ${ajisaiFestival.recentEnd}。約${ajisaiFestival.species}種・${ajisaiFestival.plants.toLocaleString()}株點綴溪谷。` })}</p>
+      <div class="grid grid-2" style="margin-top:28px">
+        <div class="card">
+          <h3>🚌 {t({ ja: 'シャトルバス', en: 'Shuttle bus', 'zh-Hant': '接駁巴士' })}</h3>
+          <ul class="checklist">
+            <li>{t(ajisaiFestival.shuttle.runsOn)}</li>
+            <li>{t({ ja: '乗り場：', en: 'Boarding: ', 'zh-Hant': '乘車處：' })}{t(ajisaiFestival.shuttle.boarding)}</li>
+            <li>{t(ajisaiFestival.shuttle.fee)}</li>
+            <li>{t(ajisaiFestival.shuttle.duration)}</li>
+          </ul>
+          <p style="font-size:.86rem;color:rgba(41,49,46,.7);margin-top:12px">{t(ajisaiFestival.shuttle.note)}</p>
+        </div>
+        <div class="card">
+          <h3>🅿️ {t({ ja: '花期の駐車場', en: 'Festival parking', 'zh-Hant': '花期停車場' })}</h3>
+          <p style="margin-bottom:14px">{t({ ja: '例年、蛍橋駐車場などが臨時駐車場として開設され、渓谷入口近くからシャトルで滝方面へ向かいます。台数・料金は変動するため、最新案内をご確認ください。', en: 'Temporary lots such as Hotaribashi open in usual years, with a shuttle from near the trail entrance to the falls. Capacity and fees vary — check the latest notice.', 'zh-Hant': '往年螢橋停車場等開放為臨時停車場，從步道入口附近搭接駁前往瀑布。車位與收費會變動，請確認最新公告。' })}</p>
+          <a class="btn btn--outline" href="/access">{t({ ja: '駐車場の詳細 →', en: 'Parking details →', 'zh-Hant': '停車場詳細 →' })}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">How to enjoy</p>
+      <h2 class="section-title">{t({ ja: '楽しみ方のポイント', en: 'How to enjoy it', 'zh-Hant': '玩法重點' })}</h2>
+      <div class="grid grid-3" style="margin-top:30px">
+        <div class="card"><div class="ico" aria-hidden="true">☔</div><h3>{t({ ja: '雨の日こそ', en: 'Rainy days shine', 'zh-Hant': '雨天更美' })}</h3><p>{t({ ja: '曇りや小雨の日は花色がやわらかく、水量も増えて渓谷に霧が立ちます。あじさいと滝の相性が最も良い天気です。足元の滑りにはご注意を。', en: 'On cloudy or light-rain days the colours soften and mist rises as the water swells — the best weather for hydrangeas and falls together. Watch your footing.', 'zh-Hant': '陰天或細雨時花色柔和、水量增加、溪谷起霧，是繡球花與瀑布最搭的天氣。請留意濕滑。' })}</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">🕐</div><h3>{t({ ja: '時間帯', en: 'Time of day', 'zh-Hant': '時段' })}</h3><p>{t({ ja: '早い時間帯は人が少なく、光もやわらかで撮影に向きます。花期の週末は日中に混み合います。', en: 'Early hours are quiet with soft light, ideal for photos. Festival weekends get crowded midday.', 'zh-Hant': '清晨人少、光線柔和，適合拍照；祭典週末中午人潮擁擠。' })}</p></div>
+        <div class="card"><div class="ico" aria-hidden="true">📷</div><h3>{t({ ja: '撮る場所', en: 'Where to shoot', 'zh-Hant': '拍攝點' })}</h3><p>{t({ ja: 'あじさいを前景に、滝を背景に置く構図が定番。橋の上や滝つぼ近くなど、角度を変えて歩いてみてください。', en: 'A classic shot frames the falls behind hydrangea in the foreground. Try different angles from the bridge or near the pool.', 'zh-Hant': '經典構圖是以繡球花為前景、瀑布為背景。可於橋上或瀑潭附近變換角度。' })}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow">
+      <p class="eyebrow">During the festival</p>
+      <h2 class="section-title">{t({ ja: 'あじさい祭りの期間', en: 'During the festival', 'zh-Hant': '祭典期間' })}</h2>
+      <p class="lead">{t({ ja: '見頃に合わせて「見帰りの滝あじさい祭り」が催されます。期間中は、通常期とは駐車・交通の状況が大きく変わります。', en: 'The “Mikaeri No Taki Hydrangea Festival” is held at peak bloom. During the period, parking and traffic differ greatly from the regular season.', 'zh-Hant': '花期舉辦「見歸里之瀧繡球花祭」。期間內停車與交通狀況與平常期大不相同。' })}</p>
+      <div class="notice warn" style="margin-top:20px">
+        <strong>{t({ ja: '花期に変わること：', en: 'What changes in bloom season: ', 'zh-Hant': '花期會改變：' })}</strong>{t({ ja: '臨時駐車場の有料化、周辺道路の交通規制、シャトルバスの運行、露店の出店など。年ごとに運用が異なるため、お出かけ前に最新の案内をご確認ください。', en: 'Paid temporary parking, traffic control on surrounding roads, shuttle operation, and stalls. Operations vary by year — check the latest notice before going.', 'zh-Hant': '臨時停車場收費、周邊道路交通管制、接駁巴士運行、攤販出攤等。每年運作不同，出發前請確認最新公告。' })}
+      </div>
+      <ul class="checklist" style="margin-top:26px">
+        <li>{t({ ja: '混雑を避けるなら平日か午前の早い時間', en: 'Avoid crowds: weekdays or early morning', 'zh-Hant': '避開人潮：平日或清晨' })}</li>
+        <li>{t({ ja: '臨時駐車場・交通規制の情報を事前に確認', en: 'Check temporary parking & traffic control in advance', 'zh-Hant': '事先確認臨時停車場與交通管制' })}</li>
+        <li>{t({ ja: 'シャトルの有無・乗り場を確認しておく', en: 'Confirm whether/where the shuttle runs', 'zh-Hant': '確認接駁是否運行與乘車處' })}</li>
+        <li>{t({ ja: '雨具と滑りにくい靴を用意', en: 'Bring rain gear and grippy shoes', 'zh-Hant': '備妥雨具與止滑鞋' })}</li>
+      </ul>
+      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--dark" href="/access">{t({ ja: '花期の駐車場・アクセス →', en: 'Festival parking & access →', 'zh-Hant': '花期停車・交通 →' })}</a>
+        <a class="btn btn--outline" href="/photo">{t({ ja: '撮影スポットを見る →', en: 'See photo spots →', 'zh-Hant': '查看攝影點 →' })}</a>
+      </div>
+    </div>
+  </section>
+</Base>

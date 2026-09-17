@@ -37,12 +37,14 @@ export const ROUTES: string[] = [
 
 export function hasTranslation(locale: Locale, slug: string): boolean {
   if (locale === 'ja') return true;
-  return translatedSlugs[locale as Exclude<Locale, 'ja'>].includes(slug);
+  const s = slug.replace(/^\/+/, '');
+  return translatedSlugs[locale as Exclude<Locale, 'ja'>].includes(s);
 }
 
-/** 生成带语系前缀的路径（不校验是否存在） */
+/** 生成带语系前缀的路径（不校验是否存在）。slug 可带或不带前导斜杠。 */
 export function localeUrl(slug: string, locale: Locale): string {
-  const path = slug === '' ? '/' : `/${slug}`;
+  const s = slug.replace(/^\/+/, '');
+  const path = s === '' ? '/' : `/${s}`;
   if (locale === 'ja') return path;
   return `/${locale}${path === '/' ? '/' : path}`;
 }
@@ -68,6 +70,12 @@ export function currentSlug(pathname: string): string {
 /** 绝对 URL */
 export function absolute(slug: string, locale: Locale, siteUrl: string): string {
   return new URL(localeUrl(slug, locale), siteUrl).toString().replace(/\/$/, slug === '' ? '/' : '');
+}
+
+/** canonical（带结尾斜杠，与默认 ja 行为一致） */
+export function canonicalUrl(slug: string, locale: Locale, siteUrl: string): string {
+  const p = slug === '' ? '/' : localeUrl(slug, locale) + '/';
+  return new URL(p, siteUrl).toString();
 }
 
 /** 将 HTML 中内部链接 href="/slug" 改写为当前语系路径（无译文则回退 ja） */

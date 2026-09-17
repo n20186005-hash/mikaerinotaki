@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import FoodCard from '../FoodCard.astro';
+import { nearFalls, karatsuFood } from '../../data/food';
+import { entity } from '../../data/entity';
+import { L, type Localized } from '../../i18n/types';
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: `${entity.nameWithVariant} 周辺のランチ・食事処｜川魚・豆腐・相知の味`,
+    description: `${entity.fullName}（見返りの滝）周辺で食べられるランチをタイプ別に案内。滝そばの川魚料理、相知の豆腐料理、唐津まで足をのばす呼子のイカ・佐賀牛・唐津バーガーまで。営業時間は変わるため事前確認を。`,
+    crumb: '周辺グルメ',
+    headTitle: '周辺グルメ',
+    headLead: '滝の周辺は飲食店が多くありません。だからこそ、滝のすぐそばで味わえるお店と、唐津まで足を延ばす“ついでグルメ”を分けてご案内します。',
+  },
+  en: {
+    title: `Food Near ${entity.fullNameEn} | River Fish, Tofu, Karatsu Specialties`,
+    description: `Lunch near ${entity.fullNameEn} (Mikaeri No Taki Falls), by type. River-fish dishes by the falls, Arito tofu, and Karatsu detours — Yobuko squid, Saga beef, Karatsu burger. Hours change, so check ahead.`,
+    crumb: 'Food Nearby',
+    headTitle: 'Food Nearby',
+    headLead: 'Few eateries right by the falls. So we split them: what you can eat just steps away, and the “detour gourmet” if you go on to Karatsu.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 周邊美食｜河魚・豆腐・相知滋味`,
+    description: `依類型介紹${entity.fullName}（見歸里之瀧）周邊的午餐。瀑布旁的河魚料理、相知豆腐，以及延伸到唐津的呼子烏賊、佐賀牛、唐津漢堡。營業時間會變動，請先確認。`,
+    crumb: '周邊美食',
+    headTitle: '周邊美食',
+    headLead: '瀑布周邊餐飲不多。因此我們分兩類：就在瀑布旁的店家，以及順遊唐津的「順路美食」。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/food" crumb={m.crumb}>
+  <PageHead crumb="FOOD" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Near the falls</p>
+      <h2 class="section-title">
+        {t({ ja: '滝のすぐそばのランチ', en: 'Lunch right by the falls', 'zh-Hant': '瀑布旁的午餐' })}
+        <span class="h2-en">Lunch near {entity.fullNameEn} (by type)</span>
+      </h2>
+      <div class="notice" style="margin-bottom:26px">
+        <strong>{t({ ja: '方針：', en: 'Our policy: ', 'zh-Hant': '原則：' })}</strong>{t({ ja: '当サイトは非営利の解説サイトです。特定の店舗名は紹介せず、「どんな種類の店がどの範囲にあるか」をまとめています。営業日・営業時間・予約は変わることがあるため、お出かけ前の電話確認がおすすめです。', en: 'This is a non-profit guide. We do not name specific shops — we summarise what kinds of places exist and where. Days, hours and reservations change, so a quick call before visiting is wise.', 'zh-Hant': '本站為非營利解說站，不介紹特定店名，僅整理「有哪些類型的店、落在哪些範圍」。營業日、時段與是否需預約常變動，建議出發前電話確認。' })}
+        <br />{entity.variantNote}
+      </div>
+      {nearFalls.map((p) => <FoodCard place={p} locale={locale} />)}
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Around Karatsu</p>
+      <h2 class="section-title">{t({ ja: '唐津まで足をのばして', en: 'A short trip to Karatsu', 'zh-Hant': '順遊唐津' })}</h2>
+      <p class="section-lead" style="margin-bottom:28px">{t({ ja: '滝の帰り道、少し車を走らせれば、唐津エリアを代表するグルメに出会えます。※滝のすぐそばではありません。', en: 'A little drive back from the falls brings you to Karatsu’s signature foods. (Not right by the falls.)', 'zh-Hant': '回程稍微開車，就能遇見唐津代表性的美食。（不在瀑布正旁。）' })}</p>
+      <div class="grid grid-3">
+        {karatsuFood.map((f) => (
+          <div class="card"><h3>{L(f.name, locale)}</h3><p>{L(f.desc, locale)}</p></div>
+        ))}
+      </div>
+      <div class="notice" style="margin-top:24px"><strong>{t({ ja: 'ヒント：', en: 'Tip: ', 'zh-Hant': '提示：' })}</strong>{t({ ja: '呼子のイカや佐賀牛の店は滝の近くではありません。「滝のそばで食べられるもの」と「唐津まで行って食べるもの」を分けて計画すると、当日あわてずに済みます。', en: 'Yobuko squid and Saga beef are not near the falls. Planning “eat by the falls” vs. “eat in Karatsu” separately keeps your day smooth.', 'zh-Hant': '呼子烏賊與佐賀牛不在瀑布附近。把「瀑布旁吃」與「去唐津吃」分開規劃，當天不會手忙腳亂。' })}</div>
+    </div>
+  </section>
+</Base>

@@ -2,8 +2,9 @@
 import { entity } from '../data/entity';
 import { site } from '../data/site';
 import type { FaqItem } from '../data/faq';
-import { LOCALE_META, localizeHref, type Locale } from '../i18n/config';
+import { LOCALE_META, localizeHref, canonicalUrl, currentSlug, type Locale } from '../i18n/config';
 import { getUi } from '../i18n/ui';
+import { L } from '../i18n/types';
 
 interface Props {
   /** 表示している FAQ（FAQPage 構造化データに使用。評価は含めない） */
@@ -16,7 +17,7 @@ interface Props {
 const { faqs = [], crumb = '', locale = 'ja' } = Astro.props;
 const ui = getUi(locale);
 
-const canonical = new URL(Astro.url.pathname.replace(/\/+$/, '') || '/', entity.siteUrl).toString();
+const canonical = canonicalUrl(currentSlug(Astro.url.pathname), locale, entity.siteUrl);
 const heroImage = `${entity.siteUrl}${entity.heroImage}`;
 
 const descriptionJa = `${entity.fullName}（${entity.fullNameEn}）は${entity.state}${entity.city}${entity.streetAddress}にある日本の滝百選の滝。あじさい・深緑・紅葉・ライトアップなど季節ごとの見どころと、アクセス、駐車場、散策ルートを案内します。`;
@@ -90,10 +91,10 @@ const faqPage = faqs.length
       '@type': 'FAQPage',
       mainEntity: faqs.map((f) => ({
         '@type': 'Question',
-        name: f.q,
+        name: L(f.q, locale),
         acceptedAnswer: {
           '@type': 'Answer',
-          text: localizeHref(f.a, locale).replace(/<[^>]+>/g, ''),
+          text: localizeHref(L(f.a, locale), locale).replace(/<[^>]+>/g, ''),
         },
       })),
     }

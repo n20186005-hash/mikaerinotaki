@@ -1,0 +1,272 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import { accessWays, parking, parkingModes } from '../../data/access';
+import { fromAirports, publicTransit, taxiGuide, drivingGuide } from '../../data/transport';
+import { entity, ajisaiFestival } from '../../data/entity';
+import { L } from '../../i18n/types';
+import { common } from '../../i18n/ui';
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const c = common[locale];
+
+const meta = {
+  ja: {
+    title: `${entity.nameWithVariant} のアクセス・駐車場｜電車・バス・車・タクシーの行き方`,
+    description: `${entity.state}${entity.city}の${entity.fullName}（見返りの滝）への行き方まとめ。唐津IC・多久ICから車、JR相知駅からタクシー、福岡空港・佐賀空港からのルート、駐車場の場所と台数、あじさい祭り期間の交通規制・シャトルまで。`,
+    crumb: 'アクセス・駐車場',
+    headTitle: 'アクセス・駐車場',
+    headLead: '相知駅・唐津IC・多久ICからの行き方と、駐車場の情報。通常期とあじさい祭り期間で運用が変わる点も整理しました。',
+  },
+  en: {
+    title: `Access & Parking for ${entity.fullNameEn} | Train, Bus, Car, Taxi`,
+    description: `How to reach ${entity.fullNameEn} (Mikaeri No Taki Falls) in ${entity.cityEn}, ${entity.stateEn}. By car from Karatsu/Taku IC, taxi from Arito Station, routes from Fukuoka/Saga airports, parking spots and capacity, plus festival traffic control and shuttle.`,
+    crumb: 'Access & Parking',
+    headTitle: 'Access & Parking',
+    headLead: 'Directions from Arito Station, Karatsu IC and Taku IC, plus parking info — including how operations change during the Hydrangea Festival.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 交通與停車｜電車・巴士・開車・計程車`,
+    description: `前往${entity.state}${entity.city}的${entity.fullName}（見歸里之瀧）的交通方式。唐津／多久交流道開車、JR相知站轉計程車、福岡／佐賀機場路線、停車場位置與車位，以及繡球花祭期間的交通管制與接駁。`,
+    crumb: '交通與停車',
+    headTitle: '交通與停車',
+    headLead: '相知站、唐津交流道、多久交流道如何抵達，以及停車資訊；並整理平常期與繡球花祭期間的差異。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/access" crumb={m.crumb}>
+  <PageHead crumb="ACCESS" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section" style="padding-top:clamp(28px,4vw,44px)">
+    <div class="wrap">
+      <div class="quicknav">
+        <a class="btn btn--dark" href={entity.mapsShareUrl} target="_blank" rel="noopener noreferrer">📍 {entity.fullNameEn} ↗</a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('見帰りの滝 蛍橋駐車場')}`} target="_blank" rel="noopener noreferrer">🅿️ {c.parkingNav}</a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('相知駅')}`} target="_blank" rel="noopener noreferrer">🚉 {c.stationNav}</a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('タクシー 唐津市相知町')}`} target="_blank" rel="noopener noreferrer">🚕 {c.taxiNav}</a>
+      </div>
+      <div class="notice" style="margin-top:18px">
+        <strong>{L({ ja: '名称について：', en: 'About the name: ', 'zh-Hant': '關於名稱：' }, locale)}</strong>{entity.variantNote}
+        {L({ ja: 'カーナビ・地図アプリは「見帰りの滝」のほか、座標（北緯 ' + entity.latitude + ' / 東経 ' + entity.longitude + '）、Plus Code（' + entity.plusCode + '）でも検索できます。', en: 'Car nav and map apps also accept the coordinates (33.3678 N / 130.0395 E) or Plus Code (' + entity.plusCode + ').', 'zh-Hant': '車用導航與地圖 App 也可搜尋座標（北緯 ' + entity.latitude + '／東經 ' + entity.longitude + '）或 Plus Code（' + entity.plusCode + '）。' }, locale)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">How to get there</p>
+      <h2 class="section-title">{L({ ja: '行き方', en: 'How to get there', 'zh-Hant': '交通方式' }, locale)}</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        {accessWays.map((w) => (
+          <div class="card">
+            <div class="ico" aria-hidden="true">{w.icon}</div>
+            <h3>{L(w.title, locale)}</h3>
+            <ul class="checklist" style="margin-top:6px">
+              {w.lines.map((l) => <li>{L(l, locale)}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">From the airport</p>
+      <h2 class="section-title">
+        {L({ ja: '空港から見帰りの滝へ', en: 'From the airports to ' + entity.fullNameEn, 'zh-Hant': '從機場前往' + entity.fullNameEn }, locale)}
+        <span class="h2-en">From airports to {entity.fullNameEn}</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:28px">
+        {L({ ja: '最寄りの空港は福岡空港と佐賀空港（利用の多いのは福岡空港）。いずれも最後は「相知駅 → タクシー」、またはレンタカーになります。', en: 'The nearest airports are Fukuoka and Saga (Fukuoka is most used). Both end with “Arito Station → taxi” or a rental car.', 'zh-Hant': '最近的機場是福岡機場與佐賀機場（多用福岡）。兩者最後都是「相知站 → 計程車」或租車。' }, locale)}
+      </p>
+      <div class="grid grid-3">
+        {
+          fromAirports.map((r) => (
+            <div class="card">
+              <div class="ico" aria-hidden="true">{r.icon}</div>
+              <h3>{L(r.title, locale)}</h3>
+              <p class="plan__meta">{L(r.time, locale)}</p>
+              <ol class="plan__steps">{r.steps.map((s) => <li>{L(s, locale)}</li>)}</ol>
+              <ul class="checklist" style="margin-top:14px">{r.tips.map((t) => <li>{L(t, locale)}</li>)}</ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Public transport</p>
+      <h2 class="section-title">
+        {L({ ja: '公共交通のくわしい使い方', en: 'Using public transport', 'zh-Hant': '大眾運輸怎麼搭' }, locale)}
+        <span class="h2-en">Trains, buses &amp; demand transport</span>
+      </h2>
+      <div class="grid grid-3" style="margin-top:28px">
+        {
+          publicTransit.map((r) => (
+            <div class="card">
+              <div class="ico" aria-hidden="true">{r.icon}</div>
+              <h3>{L(r.title, locale)}</h3>
+              <p class="plan__meta">{L(r.time, locale)}</p>
+              <ul class="checklist">{r.steps.map((s) => <li>{L(s, locale)}</li>)}</ul>
+              <ul class="checklist" style="margin-top:14px">{r.tips.map((t) => <li>{L(t, locale)}</li>)}</ul>
+            </div>
+          ))
+        }
+      </div>
+      <div class="notice warn" style="margin-top:24px">
+        <strong>{L({ ja: '公共交通の現実：', en: 'The reality of public transport: ', 'zh-Hant': '大眾運輸的實情：' }, locale)}</strong>
+        {L({ ja: 'このエリアは本数が限られます。時刻表を先に確認し、帰りの手段（終バス・終電・タクシー予約）まで決めてから出発するのが安全です。', en: 'Services are limited here. Check the timetable first and decide your return (last bus/train, taxi booking) before you set out.', 'zh-Hant': '此區域班次有限。請先查時刻表，並在出發前決定回程（末班巴士／列車、計程車預約）才安心。' }, locale)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Taxi</p>
+      <h2 class="section-title">
+        {L(taxiGuide.title, locale)}<span class="h2-en">Last few kilometres by taxi</span>
+      </h2>
+      <p class="section-lead" style="margin-bottom:24px">{L(taxiGuide.lead, locale)}</p>
+      <div class="split">
+        <ul class="checklist">
+          {taxiGuide.points.map((p) => <li>{L(p, locale)}</li>)}
+        </ul>
+        <div class="notice"><strong>{L({ ja: 'ご注意：', en: 'Note: ', 'zh-Hant': '注意：' }, locale)}</strong>{L(taxiGuide.caution, locale)}</div>
+      </div>
+      <div style="margin-top:24px">
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('タクシー 唐津市相知町')}`} target="_blank" rel="noopener">
+          {c.taxiNav} ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Driving</p>
+      <h2 class="section-title">
+        {L(drivingGuide.title, locale)}<span class="h2-en">Driving routes &amp; road notes</span>
+      </h2>
+      <div class="table-wrap" style="margin-top:26px">
+        <table>
+          <thead><tr><th>{L({ ja: '出発地', en: 'From', 'zh-Hant': '出發地' }, locale)}</th><th>{L({ ja: '距離・所要時間の目安', en: 'Approx. distance & time', 'zh-Hant': '距離・所需時間' }, locale)}</th></tr></thead>
+          <tbody>
+            {drivingGuide.routes.map((r) => <tr><td>{L(r.k, locale)}</td><td>{L(r.v, locale)}</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+      <ul class="checklist" style="margin-top:22px">
+        {drivingGuide.points.map((p) => <li>{L(p, locale)}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Parking</p>
+      <h2 class="section-title">{L({ ja: '駐車場', en: 'Parking', 'zh-Hant': '停車場' }, locale)}</h2>
+      <p class="section-lead" style="margin-bottom:26px">{L({ ja: '滝の周辺には、普通車あわせて約50台の駐車スペースがあります。場所ごとの目安は次のとおりです。', en: 'Around the falls there are about 50 car spaces in total. Approximate per-lot guide:', 'zh-Hant': '瀑布周邊約共50個小客車車位，各處概況如下。' }, locale)}</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>{L({ ja: '駐車場', en: 'Lot', 'zh-Hant': '停車場' }, locale)}</th><th>{L({ ja: '普通車', en: 'Cars', 'zh-Hant': '小客車' }, locale)}</th><th>{L({ ja: '大型車', en: 'Buses', 'zh-Hant': '大型車' }, locale)}</th><th>{L({ ja: '滝までの目安', en: 'To the falls', 'zh-Hant': '至瀑布' }, locale)}</th></tr></thead>
+          <tbody>
+            {parking.map((p) => (
+              <tr><td>{p.name}</td><td class="en">{p.car}</td><td class="en">{p.bus}</td><td>{L(p.note, locale)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.84rem;color:rgba(41,49,46,.6);margin-top:12px">{L({ ja: '※台数は目安です。あじさい祭り期間は運用が変わります。', en: '* Capacities are approximate; operations change during the festival.', 'zh-Hant': '※車位為概估，繡球花祭期間動線會改變。' }, locale)}</p>
+    </div>
+  </section>
+
+  <!-- 2027 あじさい祭り・シャトル 時効情報 -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Hydrangea Festival {ajisaiFestival.nextYear}</p>
+      <h2 class="section-title">{L({ ja: 'あじさい祭り期間のシャトル・駐車場', en: 'Festival shuttle & parking', 'zh-Hant': '祭典期間的接駁與停車' }, locale)}</h2>
+      <div class="notice" style="margin-top:18px">
+        <strong>{L({ ja: '2027年の日程：', en: '2027 dates: ', 'zh-Hant': '2027年日程：' }, locale)}</strong>{L(ajisaiFestival.nextYearStatus, locale)}
+      </div>
+      <div class="grid grid-2" style="margin-top:28px">
+        <div class="card">
+          <h3>🚌 {L({ ja: 'シャトルバス', en: 'Shuttle bus', 'zh-Hant': '接駁巴士' }, locale)}</h3>
+          <ul class="checklist">
+            <li>{L(ajisaiFestival.shuttle.runsOn, locale)}</li>
+            <li>{L({ ja: '乗り場：', en: 'Boarding: ', 'zh-Hant': '乘車處：' }, locale)}{L(ajisaiFestival.shuttle.boarding, locale)}</li>
+            <li>{L(ajisaiFestival.shuttle.fee, locale)}</li>
+            <li>{L(ajisaiFestival.shuttle.duration, locale)}</li>
+          </ul>
+          <p style="font-size:.86rem;color:rgba(41,49,46,.7);margin-top:12px">{L(ajisaiFestival.shuttle.note, locale)}</p>
+        </div>
+        <div class="card">
+          <h3>{L(parkingModes.festival.title, locale)}</h3>
+          <p style="margin-bottom:14px">{L(parkingModes.festival.desc, locale)}</p>
+          <ul class="checklist">{parkingModes.festival.points.map((p) => <li>{L(p, locale)}</li>)}</ul>
+        </div>
+      </div>
+      <div style="margin-top:24px"><a class="btn btn--dark" href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">{c.officialInfo}</a></div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <p class="eyebrow">Two modes</p>
+      <h2 class="section-title">{L({ ja: '通常期と、あじさい祭り期間', en: 'Regular season vs. festival', 'zh-Hant': '平常期與繡球花祭期間' }, locale)}</h2>
+      <div class="grid grid-2" style="margin-top:28px">
+        <div class="card">
+          <h3>{parkingModes.normal.icon} {L(parkingModes.normal.title, locale)}</h3>
+          <p style="margin-bottom:14px">{L(parkingModes.normal.desc, locale)}</p>
+          <ul class="checklist">{parkingModes.normal.points.map((p) => <li>{L(p, locale)}</li>)}</ul>
+        </div>
+        <div class="card" style="border-color:rgba(139,118,156,.35)">
+          <h3>{parkingModes.festival.icon} {L(parkingModes.festival.title, locale)}</h3>
+          <p style="margin-bottom:14px">{L(parkingModes.festival.desc, locale)}</p>
+          <ul class="checklist">{parkingModes.festival.points.map((p) => <li>{L(p, locale)}</li>)}</ul>
+        </div>
+      </div>
+      <div class="notice warn" style="margin-top:24px"><strong>{L({ ja: 'ご注意：', en: 'Note: ', 'zh-Hant': '注意：' }, locale)}</strong>{L({ ja: 'あじさい祭りの交通ルールは年ごとに異なります。ある年の情報をそのまま当てにせず、お出かけ前に最新の案内をご確認ください。', en: 'Festival traffic rules differ each year. Don’t rely on one year’s info — check the latest notice before going.', 'zh-Hant': '祭典交通規則每年不同，請勿直接套用某年資訊，出發前確認最新公告。' }, locale)}</div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow center">
+      <p class="eyebrow" style="justify-content:center">Navigate</p>
+      <h2 class="section-title">
+        {L({ ja: '地図アプリで開く', en: 'Open in maps', 'zh-Hant': '在地圖中開啟' }, locale)}
+        <span class="h2-en">Location &amp; How to Visit {entity.shortName} in {entity.cityEn}</span>
+      </h2>
+      <p class="section-lead" style="margin-inline:auto;margin-bottom:24px">{L({ ja: '目的地を選んで、お使いの地図アプリでルート案内を開始できます。', en: 'Pick a destination and start turn-by-turn navigation in your map app.', 'zh-Hant': '選擇目的地，即可用地圖 App 開始導航。' }, locale)}</p>
+      <div class="loc__map" style="margin-bottom:26px">
+        <iframe
+          src={entity.mapsEmbedSrc}
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          title={`${entity.fullName}（${entity.fullNameEn}）へのアクセスマップ`}></iframe>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+        <a class="btn btn--dark" href="https://www.google.com/maps/search/?api=1&query=見帰りの滝+蛍橋駐車場" target="_blank" rel="noopener">{c.parkingNav}</a>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&query=見帰りの滝+清流荘" target="_blank" rel="noopener">{L({ ja: '上流の駐車エリアへ', en: 'Upper parking area', 'zh-Hant': '上遊停車區' }, locale)}</a>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&query=相知駅" target="_blank" rel="noopener">{c.stationNav}</a>
+      </div>
+      <p style="margin-top:26px"><a class="btn btn--primary" href="/walk" style="background:var(--forest);color:#fff">{L({ ja: '到着後の散策ルートを見る →', en: 'See walking routes after arrival →', 'zh-Hant': '查看抵達後散步路線 →' }, locale)}</a></p>
+      <p style="margin-top:22px;font-size:.86rem;color:rgba(41,49,46,.75)">
+        {L({ ja: '所在地：', en: 'Location: ', 'zh-Hant': '所在地：' }, locale)}〒{entity.postalCode} {entity.state}{entity.city}{entity.streetAddress}（北緯 {entity.latitude} / 東経 {entity.longitude}）／
+        For official updates, visit
+        <a href={entity.govtTourismUrl} target="_blank" rel="noopener noreferrer">{entity.stateEn} / {entity.cityEn} Official Tourism Portal</a>.
+      </p>
+    </div>
+  </section>
+</Base>

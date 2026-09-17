@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../PageHead.astro';
+import FAQ from '../FAQ.astro';
+import { faqs } from '../../data/faq';
+import { entity } from '../../data/entity';
+import { L, type Localized } from '../../i18n/types';
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'ja' } = Astro.props;
+const t = (o: Localized) => L(o, locale);
+
+const meta = {
+  ja: {
+    title: `${entity.nameWithVariant} よくある質問｜料金・滞在時間・駐車場・ペット`,
+    description: `${entity.fullName}（見返りの滝）の疑問にまとめて回答。入場は無料？滞在時間の目安？ベビーカーやペットは大丈夫？あじさいの見頃、雨の日、夜のライトアップ、公共交通での行き方まで。`,
+    crumb: 'よくある質問',
+    headTitle: 'よくある質問',
+    headLead: '料金、見頃、歩きやすさ、駐車場、雨の日、ペット、ライトアップまで。見帰りの滝を訪れる前の疑問にお答えします。',
+    moreLinks: 'まだ疑問が残る場合は、<a href="/access">アクセス</a>・<a href="/ajisai">あじさい</a>・<a href="/walk">散策ルート</a>の各ページもあわせてご覧ください。',
+  },
+  en: {
+    title: `FAQ for ${entity.fullNameEn} | Fees, Stay, Parking, Pets`,
+    description: `Answers to common questions about ${entity.fullNameEn} (Mikaeri No Taki Falls). Free admission? How long to stay? Stroller or pets OK? Hydrangea peak, rainy days, night light-up, getting there by public transport.`,
+    crumb: 'FAQ',
+    headTitle: 'FAQ',
+    headLead: 'Fees, peak season, walkability, parking, rainy days, pets and light-ups — your questions before visiting Mikaeri No Taki.',
+    moreLinks: 'Still unsure? Also see the <a href="/access">Access</a>, <a href="/ajisai">Hydrangea</a> and <a href="/walk">Walking routes</a> pages.',
+  },
+  'zh-Hant': {
+    title: `${entity.fullNameEn} 常見問題｜費用・停留・停車・寵物`,
+    description: `彙整${entity.fullName}（見歸里之瀧）的常見疑問。免費入場？建議停留多久？嬰兒車或寵物可以嗎？繡球花花期、雨天、夜間點燈、大眾運輸怎麼去。`,
+    crumb: '常見問題',
+    headTitle: '常見問題',
+    headLead: '費用、花期、好走程度、停車、雨天、寵物與點燈——拜訪見歸里之瀧前的疑問，在此解答。',
+    moreLinks: '仍有疑問？也歡迎參考<a href="/access">交通</a>、<a href="/ajisai">繡球花</a>與<a href="/walk">散步路線</a>頁面。',
+  },
+} as const;
+const m = meta[locale];
+---
+<Base title={m.title} description={m.description} locale={locale} active="/faq" crumb={m.crumb} faqs={faqs}>
+  <PageHead crumb="FAQ" title={m.headTitle} lead={m.headLead} locale={locale} />
+
+  <section class="section">
+    <div class="wrap narrow">
+      <FAQ items={faqs} locale={locale} />
+      <div class="spacer"></div>
+      <div class="notice" set:html={m.moreLinks}></div>
+    </div>
+  </section>
+</Base>

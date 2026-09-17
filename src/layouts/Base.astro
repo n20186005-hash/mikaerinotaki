@@ -7,7 +7,7 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 import { entity } from '../data/entity';
 import { site } from '../data/site';
 import type { FaqItem } from '../data/faq';
-import { locales, LOCALE_META, hasTranslation, localeUrl, currentSlug, type Locale } from '../i18n/config';
+import { locales, LOCALE_META, hasTranslation, localeUrl, canonicalUrl, currentSlug, type Locale } from '../i18n/config';
 
 interface Props {
   title: string;
@@ -37,7 +37,7 @@ const {
 const slug = currentSlug(Astro.url.pathname);
 const meta = LOCALE_META[locale];
 const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const canonical = new URL(localeUrl(slug, locale), entity.siteUrl).toString();
+const canonical = canonicalUrl(slug, locale, entity.siteUrl);
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, entity.siteUrl).toString();
 // PWA: 服务工作线程仅在生产构建注册
 const enableSw = import.meta.env.PROD;
@@ -45,9 +45,9 @@ const enableSw = import.meta.env.PROD;
 // hreflang 备用链接：每个有译文的语系 + x-default(ja)
 const hreflangs = locales
   .filter((l) => hasTranslation(l, slug))
-  .map((l) => ({ code: LOCALE_META[l].hreflang, url: new URL(localeUrl(slug, l), entity.siteUrl).toString() }));
-hreflangs.push({ code: 'x-default', url: new URL(localeUrl(slug, 'ja'), entity.siteUrl).toString() });
-
+  .map((l) => ({ code: LOCALE_META[l].hreflang, url: canonicalUrl(slug, l, entity.siteUrl) }));
+hreflangs.push({ code: 'x-default', url: canonicalUrl(slug, 'ja', entity.siteUrl) });
+---
 
 <!doctype html>
 <html lang={meta.htmlLang}>

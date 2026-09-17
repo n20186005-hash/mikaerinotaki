@@ -20,8 +20,6 @@ const brandHref = localeUrlSafe('', locale);
       <Logo />
       <span><b>{site.name}</b><small>{site.romaji}</small></span>
     </a>
-    <LangSwitcher locale={locale} slug={slug} />
-    <button class="nav-toggle" aria-label="メニュー" aria-controls="nav" aria-expanded="false"><span></span></button>
     <nav class="nav" id="nav">
       {
         navItems.map((item) => (
@@ -31,5 +29,9 @@ const brandHref = localeUrlSafe('', locale);
         ))
       }
     </nav>
+    <div class="header-right">
+      <LangSwitcher locale={locale} slug={slug} />
+      <button class="nav-toggle" aria-label="メニュー" aria-controls="nav" aria-expanded="false"><span></span></button>
+    </div>
   </div>
 </header>
